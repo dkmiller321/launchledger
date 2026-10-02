@@ -8,3 +8,4 @@ test-results/
 .ruff_cache/
 evals/cases/drafts/
 eval-reports/
+.playwright-mcp/

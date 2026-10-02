@@ -1,0 +1,5 @@
+# Eval pass-rate thresholds per workflow (PRD V4).
+
+[thresholds]
+mock = 1.0
+real = 0.9

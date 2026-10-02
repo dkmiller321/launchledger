@@ -1,0 +1,75 @@
+- id: W6-01
+  question: Is SN-0042 ready for stage integration?
+  expected_workflow: build_readiness
+  expected_decision: answered
+  expected_facts:
+  - system: MES
+    record_type: work_order
+    record_id: WO-50102
+    field: status
+    value: BLOCKED
+  - system: MES
+    record_type: work_order
+    record_id: WO-50103
+    field: status
+    value: OPEN
+  - system: MES
+    record_type: ncr
+    record_id: NCR-0311
+    field: status
+    value: OPEN
+  - system: MES
+    record_type: inspection
+    record_id: INS-7001
+    field: result
+    value: PASS
+  forbidden_values: []
+- id: W6-02
+  question: Is SN-0101 ready to ship?
+  expected_workflow: build_readiness
+  expected_decision: answered
+  expected_facts:
+  - system: MES
+    record_type: work_order
+    record_id: WO-50300
+    field: status
+    value: CLOSED
+  - system: MES
+    record_type: inspection
+    record_id: INS-7002
+    field: result
+    value: PASS
+  forbidden_values: []
+- id: W6-03
+  question: Is SN-0057 ready for integration?
+  expected_workflow: build_readiness
+  expected_decision: answered
+  expected_facts:
+  - system: MES
+    record_type: work_order
+    record_id: WO-50217
+    field: status
+    value: OPEN
+  - system: MES
+    record_type: ncr
+    record_id: NCR-0320
+    field: status
+    value: OPEN
+  forbidden_values: []
+- id: W6-04
+  question: Is SN-0120 ready for integration?
+  expected_workflow: build_readiness
+  expected_decision: answered
+  expected_facts:
+  - system: MES
+    record_type: work_order
+    record_id: WO-50410
+    field: status
+    value: OPEN
+  forbidden_values: []
+- id: W6-05
+  question: Is SN-0404 ready for integration?
+  expected_workflow: build_readiness
+  expected_decision: answered
+  expected_facts: []
+  forbidden_values: []

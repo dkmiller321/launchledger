@@ -1,0 +1,8 @@
+{% extends "base.html" %}
+{% block title %}Drift{% endblock %}
+{% block content %}
+<h1>Upstream drift</h1>
+<p class="muted">Every tool response is checked against its system's contract before the model sees it.
+An open incident gates every response that carries its field until someone resolves it.</p>
+{% include "_drift_panel.html" %}
+{% endblock %}

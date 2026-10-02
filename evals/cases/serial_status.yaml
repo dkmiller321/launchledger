@@ -1,0 +1,115 @@
+- id: W1-01
+  question: Where is SN-0042 and what's blocking it?
+  expected_workflow: serial_status
+  expected_decision: answered
+  expected_facts:
+  - system: MES
+    record_type: serial
+    record_id: SN-0042
+    field: status
+    value: IN_BUILD
+  - system: MES
+    record_type: serial
+    record_id: SN-0042
+    field: location
+    value: Bay 3 - Engine Integration
+  - system: MES
+    record_type: work_order
+    record_id: WO-50102
+    field: status
+    value: BLOCKED
+  - system: MES
+    record_type: work_order
+    record_id: WO-50102
+    field: blocked_reason
+    value: Awaiting inducer housing castings
+  - system: MES
+    record_type: work_order
+    record_id: WO-50102
+    field: depends_on_po
+    value: PO-10233
+  - system: MES
+    record_type: work_order
+    record_id: WO-50103
+    field: status
+    value: OPEN
+  forbidden_values: []
+- id: W1-02
+  question: Where is SN-0057 right now?
+  expected_workflow: serial_status
+  expected_decision: answered
+  expected_facts:
+  - system: MES
+    record_type: serial
+    record_id: SN-0057
+    field: status
+    value: IN_BUILD
+  - system: MES
+    record_type: serial
+    record_id: SN-0057
+    field: location
+    value: Bay 3 - Engine Integration
+  - system: MES
+    record_type: work_order
+    record_id: WO-50217
+    field: status
+    value: OPEN
+  - system: MES
+    record_type: work_order
+    record_id: WO-50217
+    field: depends_on_po
+    value: PO-10233
+  forbidden_values: []
+- id: W1-03
+  question: Where is SN-0101?
+  expected_workflow: serial_status
+  expected_decision: answered
+  expected_facts:
+  - system: MES
+    record_type: serial
+    record_id: SN-0101
+    field: status
+    value: COMPLETE
+  - system: MES
+    record_type: serial
+    record_id: SN-0101
+    field: location
+    value: Stores - Building 2
+  - system: MES
+    record_type: work_order
+    record_id: WO-50300
+    field: status
+    value: CLOSED
+  forbidden_values: []
+- id: W1-04
+  question: Where is SN-0404?
+  expected_workflow: serial_status
+  expected_decision: answered
+  expected_facts: []
+  forbidden_values: []
+- id: W1-05
+  question: What's the current status of SN-0120?
+  expected_workflow: serial_status
+  expected_decision: answered
+  expected_facts:
+  - system: MES
+    record_type: serial
+    record_id: SN-0120
+    field: status
+    value: PLANNED
+  - system: MES
+    record_type: serial
+    record_id: SN-0120
+    field: location
+    value: Bay 1 - Kitting
+  - system: MES
+    record_type: work_order
+    record_id: WO-50410
+    field: status
+    value: OPEN
+  - system: MES
+    record_type: work_order
+    record_id: WO-50410
+    field: depends_on_po
+    value: PO-10410
+  forbidden_values: []

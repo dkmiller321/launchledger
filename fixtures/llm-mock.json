@@ -1,0 +1,2098 @@
+{
+ "router": [
+  {
+   "trigger": "which work orders are at risk from late pos from cryo valve works?",
+   "workflow": "supplier_impact"
+  },
+  {
+   "trigger": "are any work orders at risk from late pos from orbital fasteners?",
+   "workflow": "supplier_impact"
+  },
+  {
+   "trigger": "which work orders are at risk from late pos from acme rockets?",
+   "workflow": "supplier_impact"
+  },
+  {
+   "trigger": "what's in the bill of materials for p-2001?",
+   "workflow": "where_used"
+  },
+  {
+   "trigger": "which open work orders depend on po-10233?",
+   "workflow": "supplier_impact"
+  },
+  {
+   "trigger": "list all nonconformances against sn-0042",
+   "workflow": "ncr_summary"
+  },
+  {
+   "trigger": "what's the current status of sn-0120?",
+   "workflow": "serial_status"
+  },
+  {
+   "trigger": "which ncrs are open on part p-2110?",
+   "workflow": "ncr_summary"
+  },
+  {
+   "trigger": "which assemblies use part p-3300?",
+   "workflow": "where_used"
+  },
+  {
+   "trigger": "which assemblies use part p-1500?",
+   "workflow": "where_used"
+  },
+  {
+   "trigger": "which assemblies use part p-9999?",
+   "workflow": "where_used"
+  },
+  {
+   "trigger": "is sn-0057 ready for integration?",
+   "workflow": "build_readiness"
+  },
+  {
+   "trigger": "is sn-0120 ready for integration?",
+   "workflow": "build_readiness"
+  },
+  {
+   "trigger": "is sn-0404 ready for integration?",
+   "workflow": "build_readiness"
+  },
+  {
+   "trigger": "which assemblies use part p-1077",
+   "workflow": "where_used"
+  },
+  {
+   "trigger": "what's the status of po-10240?",
+   "workflow": "po_status"
+  },
+  {
+   "trigger": "what's the status of po-99999?",
+   "workflow": "po_status"
+  },
+  {
+   "trigger": "show ncr details for sn-0057",
+   "workflow": "ncr_summary"
+  },
+  {
+   "trigger": "where is sn-0057 right now?",
+   "workflow": "serial_status"
+  },
+  {
+   "trigger": "late pos from apex castings",
+   "workflow": "supplier_impact"
+  },
+  {
+   "trigger": "does sn-0101 have any ncrs?",
+   "workflow": "ncr_summary"
+  },
+  {
+   "trigger": "has po-10198 been received?",
+   "workflow": "po_status"
+  },
+  {
+   "trigger": "ready for stage integration",
+   "workflow": "build_readiness"
+  },
+  {
+   "trigger": "is sn-0101 ready to ship?",
+   "workflow": "build_readiness"
+  },
+  {
+   "trigger": "repairable output test",
+   "workflow": "serial_status"
+  },
+  {
+   "trigger": "malformed output test",
+   "workflow": "serial_status"
+  },
+  {
+   "trigger": "open nonconformances",
+   "workflow": "ncr_summary"
+  },
+  {
+   "trigger": "inducer details test",
+   "workflow": "where_used"
+  },
+  {
+   "trigger": "missing caveat test",
+   "workflow": "serial_status"
+  },
+  {
+   "trigger": "status of po-10233",
+   "workflow": "po_status"
+  },
+  {
+   "trigger": "uncited claim test",
+   "workflow": "serial_status"
+  },
+  {
+   "trigger": "where is sn-0101?",
+   "workflow": "serial_status"
+  },
+  {
+   "trigger": "where is sn-0404?",
+   "workflow": "serial_status"
+  },
+  {
+   "trigger": "is po-10410 late?",
+   "workflow": "po_status"
+  },
+  {
+   "trigger": "ghost serial test",
+   "workflow": "serial_status"
+  },
+  {
+   "trigger": "wrong status test",
+   "workflow": "serial_status"
+  },
+  {
+   "trigger": "where is sn-0042",
+   "workflow": "serial_status"
+  }
+ ],
+ "workflows": [
+  {
+   "id": "W2-03",
+   "trigger": "which work orders are at risk from late pos from cryo valve works?",
+   "steps": [
+    {
+     "tool_calls": [
+      {
+       "name": "find_supplier",
+       "arguments": {
+        "name": "Cryo Valve Works"
+       }
+      }
+     ]
+    },
+    {
+     "tool_calls": [
+      {
+       "name": "list_pos",
+       "arguments": {
+        "supplier_id": "SUP-019",
+        "status": "OPEN"
+       }
+      }
+     ]
+    },
+    {
+     "tool_calls": [
+      {
+       "name": "list_work_orders",
+       "arguments": {
+        "depends_on_po": "PO-10410"
+       }
+      }
+     ]
+    },
+    {
+     "final": {
+      "answer": "Cryo Valve Works has one late open PO: PO-10410 was due 2026-09-20 and is still OPEN. WO-50410 depends on it.",
+      "claims": [
+       {
+        "text": "PO-10410 from Cryo Valve Works is past due.",
+        "facts": [
+         {
+          "system": "ERP",
+          "record_type": "supplier",
+          "record_id": "SUP-019",
+          "field": "name",
+          "value": "Cryo Valve Works"
+         },
+         {
+          "system": "ERP",
+          "record_type": "purchase_order",
+          "record_id": "PO-10410",
+          "field": "status",
+          "value": "OPEN"
+         },
+         {
+          "system": "ERP",
+          "record_type": "purchase_order",
+          "record_id": "PO-10410",
+          "field": "due_date",
+          "value": "2026-09-20"
+         }
+        ]
+       },
+       {
+        "text": "WO-50410 depends on PO-10410.",
+        "facts": [
+         {
+          "system": "MES",
+          "record_type": "work_order",
+          "record_id": "WO-50410",
+          "field": "depends_on_po",
+          "value": "PO-10410"
+         }
+        ]
+       }
+      ],
+      "caveats": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "W2-02",
+   "trigger": "are any work orders at risk from late pos from orbital fasteners?",
+   "steps": [
+    {
+     "tool_calls": [
+      {
+       "name": "find_supplier",
+       "arguments": {
+        "name": "Orbital Fasteners"
+       }
+      }
+     ]
+    },
+    {
+     "tool_calls": [
+      {
+       "name": "list_pos",
+       "arguments": {
+        "supplier_id": "SUP-012",
+        "status": "OPEN"
+       }
+      }
+     ]
+    },
+    {
+     "final": {
+      "answer": "Orbital Fasteners has no late open POs: PO-10300 is due 2026-10-15 and promised for the same day, so no work orders are at risk from them.",
+      "claims": [
+       {
+        "text": "Orbital Fasteners' only open PO is on time.",
+        "facts": [
+         {
+          "system": "ERP",
+          "record_type": "supplier",
+          "record_id": "SUP-012",
+          "field": "name",
+          "value": "Orbital Fasteners"
+         },
+         {
+          "system": "ERP",
+          "record_type": "purchase_order",
+          "record_id": "PO-10300",
+          "field": "due_date",
+          "value": "2026-10-15"
+         },
+         {
+          "system": "ERP",
+          "record_type": "purchase_order",
+          "record_id": "PO-10300",
+          "field": "promised_date",
+          "value": "2026-10-15"
+         }
+        ]
+       }
+      ],
+      "caveats": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "W2-04",
+   "trigger": "which work orders are at risk from late pos from acme rockets?",
+   "steps": [
+    {
+     "tool_calls": [
+      {
+       "name": "find_supplier",
+       "arguments": {
+        "name": "Acme Rockets"
+       }
+      }
+     ]
+    },
+    {
+     "final": {
+      "answer": "No supplier named Acme Rockets was found in ERP, so I can't assess its POs.",
+      "claims": [],
+      "caveats": [
+       "No supplier named Acme Rockets was found in ERP."
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "W3-03",
+   "trigger": "what's in the bill of materials for p-2001?",
+   "steps": [
+    {
+     "tool_calls": [
+      {
+       "name": "get_bom",
+       "arguments": {
+        "part_number": "P-2001"
+       }
+      }
+     ]
+    },
+    {
+     "final": {
+      "answer": "P-2001 contains P-1077 (quantity 1) and P-3300 (quantity 1).",
+      "claims": [
+       {
+        "text": "P-2001 contains P-1077 and P-3300.",
+        "facts": [
+         {
+          "system": "PLM",
+          "record_type": "bom_line",
+          "record_id": "BL-0001",
+          "field": "child_pn",
+          "value": "P-1077"
+         },
+         {
+          "system": "PLM",
+          "record_type": "bom_line",
+          "record_id": "BL-0001",
+          "field": "qty",
+          "value": 1
+         },
+         {
+          "system": "PLM",
+          "record_type": "bom_line",
+          "record_id": "BL-0003",
+          "field": "child_pn",
+          "value": "P-3300"
+         },
+         {
+          "system": "PLM",
+          "record_type": "bom_line",
+          "record_id": "BL-0003",
+          "field": "qty",
+          "value": 1
+         }
+        ]
+       }
+      ],
+      "caveats": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "W2-05",
+   "trigger": "which open work orders depend on po-10233?",
+   "steps": [
+    {
+     "tool_calls": [
+      {
+       "name": "list_work_orders",
+       "arguments": {
+        "depends_on_po": "PO-10233"
+       }
+      }
+     ]
+    },
+    {
+     "final": {
+      "answer": "Two work orders depend on PO-10233: WO-50102 (BLOCKED) and WO-50217 (OPEN).",
+      "claims": [
+       {
+        "text": "WO-50102 and WO-50217 depend on PO-10233.",
+        "facts": [
+         {
+          "system": "MES",
+          "record_type": "work_order",
+          "record_id": "WO-50102",
+          "field": "depends_on_po",
+          "value": "PO-10233"
+         },
+         {
+          "system": "MES",
+          "record_type": "work_order",
+          "record_id": "WO-50102",
+          "field": "status",
+          "value": "BLOCKED"
+         },
+         {
+          "system": "MES",
+          "record_type": "work_order",
+          "record_id": "WO-50217",
+          "field": "depends_on_po",
+          "value": "PO-10233"
+         },
+         {
+          "system": "MES",
+          "record_type": "work_order",
+          "record_id": "WO-50217",
+          "field": "status",
+          "value": "OPEN"
+         }
+        ]
+       }
+      ],
+      "caveats": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "W4-02",
+   "trigger": "list all nonconformances against sn-0042",
+   "steps": [
+    {
+     "tool_calls": [
+      {
+       "name": "list_ncrs",
+       "arguments": {
+        "serial_number": "SN-0042"
+       }
+      }
+     ]
+    },
+    {
+     "final": {
+      "answer": "SN-0042 has two nonconformances: NCR-0311 (MAJOR, OPEN) and NCR-0298 (MINOR, CLOSED).",
+      "claims": [
+       {
+        "text": "NCR-0311 is major and open.",
+        "facts": [
+         {
+          "system": "MES",
+          "record_type": "ncr",
+          "record_id": "NCR-0311",
+          "field": "status",
+          "value": "OPEN"
+         },
+         {
+          "system": "MES",
+          "record_type": "ncr",
+          "record_id": "NCR-0311",
+          "field": "severity",
+          "value": "MAJOR"
+         }
+        ]
+       },
+       {
+        "text": "NCR-0298 is minor and closed.",
+        "facts": [
+         {
+          "system": "MES",
+          "record_type": "ncr",
+          "record_id": "NCR-0298",
+          "field": "status",
+          "value": "CLOSED"
+         },
+         {
+          "system": "MES",
+          "record_type": "ncr",
+          "record_id": "NCR-0298",
+          "field": "severity",
+          "value": "MINOR"
+         }
+        ]
+       }
+      ],
+      "caveats": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "W1-05",
+   "trigger": "what's the current status of sn-0120?",
+   "steps": [
+    {
+     "tool_calls": [
+      {
+       "name": "get_serial",
+       "arguments": {
+        "serial_number": "SN-0120"
+       }
+      }
+     ]
+    },
+    {
+     "tool_calls": [
+      {
+       "name": "list_work_orders",
+       "arguments": {
+        "serial_number": "SN-0120"
+       }
+      }
+     ]
+    },
+    {
+     "final": {
+      "answer": "SN-0120 is PLANNED in Bay 1 - Kitting. WO-50410 is OPEN and depends on PO-10410.",
+      "claims": [
+       {
+        "text": "SN-0120 is planned and in kitting.",
+        "facts": [
+         {
+          "system": "MES",
+          "record_type": "serial",
+          "record_id": "SN-0120",
+          "field": "status",
+          "value": "PLANNED"
+         },
+         {
+          "system": "MES",
+          "record_type": "serial",
+          "record_id": "SN-0120",
+          "field": "location",
+          "value": "Bay 1 - Kitting"
+         }
+        ]
+       },
+       {
+        "text": "WO-50410 is open and waits on PO-10410.",
+        "facts": [
+         {
+          "system": "MES",
+          "record_type": "work_order",
+          "record_id": "WO-50410",
+          "field": "status",
+          "value": "OPEN"
+         },
+         {
+          "system": "MES",
+          "record_type": "work_order",
+          "record_id": "WO-50410",
+          "field": "depends_on_po",
+          "value": "PO-10410"
+         }
+        ]
+       }
+      ],
+      "caveats": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "W4-04",
+   "trigger": "which ncrs are open on part p-2110?",
+   "steps": [
+    {
+     "tool_calls": [
+      {
+       "name": "list_ncrs",
+       "arguments": {
+        "part_number": "P-2110",
+        "status": "OPEN"
+       }
+      }
+     ]
+    },
+    {
+     "final": {
+      "answer": "One NCR is open on P-2110: NCR-0320 (MINOR) on SN-0057, Flange surface pitting.",
+      "claims": [
+       {
+        "text": "NCR-0320 is open on SN-0057.",
+        "facts": [
+         {
+          "system": "MES",
+          "record_type": "ncr",
+          "record_id": "NCR-0320",
+          "field": "status",
+          "value": "OPEN"
+         },
+         {
+          "system": "MES",
+          "record_type": "ncr",
+          "record_id": "NCR-0320",
+          "field": "severity",
+          "value": "MINOR"
+         },
+         {
+          "system": "MES",
+          "record_type": "ncr",
+          "record_id": "NCR-0320",
+          "field": "serial_number",
+          "value": "SN-0057"
+         },
+         {
+          "system": "MES",
+          "record_type": "ncr",
+          "record_id": "NCR-0320",
+          "field": "description",
+          "value": "Flange surface pitting"
+         }
+        ]
+       }
+      ],
+      "caveats": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "W3-02",
+   "trigger": "which assemblies use part p-3300?",
+   "steps": [
+    {
+     "tool_calls": [
+      {
+       "name": "where_used",
+       "arguments": {
+        "part_number": "P-3300"
+       }
+      }
+     ]
+    },
+    {
+     "final": {
+      "answer": "P-3300 is used in one assembly: P-2001, quantity 1.",
+      "claims": [
+       {
+        "text": "P-3300 is used once in P-2001.",
+        "facts": [
+         {
+          "system": "PLM",
+          "record_type": "bom_line",
+          "record_id": "BL-0003",
+          "field": "parent_pn",
+          "value": "P-2001"
+         },
+         {
+          "system": "PLM",
+          "record_type": "bom_line",
+          "record_id": "BL-0003",
+          "field": "qty",
+          "value": 1
+         }
+        ]
+       }
+      ],
+      "caveats": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "W3-04",
+   "trigger": "which assemblies use part p-1500?",
+   "steps": [
+    {
+     "tool_calls": [
+      {
+       "name": "where_used",
+       "arguments": {
+        "part_number": "P-1500"
+       }
+      }
+     ]
+    },
+    {
+     "final": {
+      "answer": "No assemblies in PLM use P-1500.",
+      "claims": [],
+      "caveats": [
+       "PLM lists no BOM lines that use P-1500."
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "W3-05",
+   "trigger": "which assemblies use part p-9999?",
+   "steps": [
+    {
+     "tool_calls": [
+      {
+       "name": "where_used",
+       "arguments": {
+        "part_number": "P-9999"
+       }
+      }
+     ]
+    },
+    {
+     "final": {
+      "answer": "I couldn't find part P-9999 in PLM.",
+      "claims": [],
+      "caveats": [
+       "P-9999 was not found in PLM."
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "W6-03",
+   "trigger": "is sn-0057 ready for integration?",
+   "steps": [
+    {
+     "tool_calls": [
+      {
+       "name": "list_work_orders",
+       "arguments": {
+        "serial_number": "SN-0057"
+       }
+      }
+     ]
+    },
+    {
+     "tool_calls": [
+      {
+       "name": "list_inspections",
+       "arguments": {
+        "serial_number": "SN-0057"
+       }
+      }
+     ]
+    },
+    {
+     "tool_calls": [
+      {
+       "name": "list_ncrs",
+       "arguments": {
+        "serial_number": "SN-0057",
+        "status": "OPEN"
+       }
+      }
+     ]
+    },
+    {
+     "final": {
+      "answer": "No. SN-0057 is not ready: WO-50217 is OPEN, NCR-0320 is OPEN, and no inspection is recorded.",
+      "claims": [
+       {
+        "text": "WO-50217 is open.",
+        "facts": [
+         {
+          "system": "MES",
+          "record_type": "work_order",
+          "record_id": "WO-50217",
+          "field": "status",
+          "value": "OPEN"
+         }
+        ]
+       },
+       {
+        "text": "NCR-0320 is open.",
+        "facts": [
+         {
+          "system": "MES",
+          "record_type": "ncr",
+          "record_id": "NCR-0320",
+          "field": "status",
+          "value": "OPEN"
+         }
+        ]
+       }
+      ],
+      "caveats": [
+       "MES has no inspections for SN-0057."
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "W6-04",
+   "trigger": "is sn-0120 ready for integration?",
+   "steps": [
+    {
+     "tool_calls": [
+      {
+       "name": "list_work_orders",
+       "arguments": {
+        "serial_number": "SN-0120"
+       }
+      }
+     ]
+    },
+    {
+     "tool_calls": [
+      {
+       "name": "list_inspections",
+       "arguments": {
+        "serial_number": "SN-0120"
+       }
+      }
+     ]
+    },
+    {
+     "tool_calls": [
+      {
+       "name": "list_ncrs",
+       "arguments": {
+        "serial_number": "SN-0120",
+        "status": "OPEN"
+       }
+      }
+     ]
+    },
+    {
+     "final": {
+      "answer": "No. SN-0120 is not ready: WO-50410 is still OPEN and no inspection is recorded.",
+      "claims": [
+       {
+        "text": "WO-50410 is open.",
+        "facts": [
+         {
+          "system": "MES",
+          "record_type": "work_order",
+          "record_id": "WO-50410",
+          "field": "status",
+          "value": "OPEN"
+         }
+        ]
+       }
+      ],
+      "caveats": [
+       "MES has no inspections or open NCRs for SN-0120."
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "W6-05",
+   "trigger": "is sn-0404 ready for integration?",
+   "steps": [
+    {
+     "tool_calls": [
+      {
+       "name": "get_serial",
+       "arguments": {
+        "serial_number": "SN-0404"
+       }
+      }
+     ]
+    },
+    {
+     "final": {
+      "answer": "I couldn't find SN-0404 in MES.",
+      "claims": [],
+      "caveats": [
+       "SN-0404 was not found in MES."
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "W3-01",
+   "trigger": "which assemblies use part p-1077",
+   "steps": [
+    {
+     "tool_calls": [
+      {
+       "name": "where_used",
+       "arguments": {
+        "part_number": "P-1077"
+       }
+      }
+     ]
+    },
+    {
+     "final": {
+      "answer": "P-1077 is used in two assemblies: P-2001 and P-2110, quantity 1 in each.",
+      "claims": [
+       {
+        "text": "P-1077 is used once in P-2001 and once in P-2110.",
+        "facts": [
+         {
+          "system": "PLM",
+          "record_type": "bom_line",
+          "record_id": "BL-0001",
+          "field": "parent_pn",
+          "value": "P-2001"
+         },
+         {
+          "system": "PLM",
+          "record_type": "bom_line",
+          "record_id": "BL-0001",
+          "field": "qty",
+          "value": 1
+         },
+         {
+          "system": "PLM",
+          "record_type": "bom_line",
+          "record_id": "BL-0002",
+          "field": "parent_pn",
+          "value": "P-2110"
+         },
+         {
+          "system": "PLM",
+          "record_type": "bom_line",
+          "record_id": "BL-0002",
+          "field": "qty",
+          "value": 1
+         }
+        ]
+       }
+      ],
+      "caveats": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "W5-02",
+   "trigger": "what's the status of po-10240?",
+   "steps": [
+    {
+     "tool_calls": [
+      {
+       "name": "get_po",
+       "arguments": {
+        "po_id": "PO-10240"
+       }
+      }
+     ]
+    },
+    {
+     "tool_calls": [
+      {
+       "name": "get_supplier",
+       "arguments": {
+        "supplier_id": "SUP-007"
+       }
+      }
+     ]
+    },
+    {
+     "final": {
+      "answer": "PO-10240 from Apex Castings is OPEN and on time: due and promised for 2026-11-01.",
+      "claims": [
+       {
+        "text": "PO-10240 is open and on time.",
+        "facts": [
+         {
+          "system": "ERP",
+          "record_type": "purchase_order",
+          "record_id": "PO-10240",
+          "field": "status",
+          "value": "OPEN"
+         },
+         {
+          "system": "ERP",
+          "record_type": "purchase_order",
+          "record_id": "PO-10240",
+          "field": "due_date",
+          "value": "2026-11-01"
+         },
+         {
+          "system": "ERP",
+          "record_type": "purchase_order",
+          "record_id": "PO-10240",
+          "field": "promised_date",
+          "value": "2026-11-01"
+         },
+         {
+          "system": "ERP",
+          "record_type": "supplier",
+          "record_id": "SUP-007",
+          "field": "name",
+          "value": "Apex Castings"
+         }
+        ]
+       }
+      ],
+      "caveats": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "W5-05",
+   "trigger": "what's the status of po-99999?",
+   "steps": [
+    {
+     "tool_calls": [
+      {
+       "name": "get_po",
+       "arguments": {
+        "po_id": "PO-99999"
+       }
+      }
+     ]
+    },
+    {
+     "final": {
+      "answer": "I couldn't find PO-99999 in ERP.",
+      "claims": [],
+      "caveats": [
+       "PO-99999 was not found in ERP."
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "W4-05",
+   "trigger": "show ncr details for sn-0057",
+   "steps": [
+    {
+     "tool_calls": [
+      {
+       "name": "list_ncrs",
+       "arguments": {
+        "serial_number": "SN-0057"
+       }
+      }
+     ]
+    },
+    {
+     "final": {
+      "answer": "SN-0057 has one nonconformance: NCR-0320, MINOR and OPEN, Flange surface pitting, against REQ-118.",
+      "claims": [
+       {
+        "text": "NCR-0320 is a minor open NCR against REQ-118.",
+        "facts": [
+         {
+          "system": "MES",
+          "record_type": "ncr",
+          "record_id": "NCR-0320",
+          "field": "description",
+          "value": "Flange surface pitting"
+         },
+         {
+          "system": "MES",
+          "record_type": "ncr",
+          "record_id": "NCR-0320",
+          "field": "severity",
+          "value": "MINOR"
+         },
+         {
+          "system": "MES",
+          "record_type": "ncr",
+          "record_id": "NCR-0320",
+          "field": "status",
+          "value": "OPEN"
+         },
+         {
+          "system": "MES",
+          "record_type": "ncr",
+          "record_id": "NCR-0320",
+          "field": "requirement_id",
+          "value": "REQ-118"
+         }
+        ]
+       }
+      ],
+      "caveats": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "W1-02",
+   "trigger": "where is sn-0057 right now?",
+   "steps": [
+    {
+     "tool_calls": [
+      {
+       "name": "get_serial",
+       "arguments": {
+        "serial_number": "SN-0057"
+       }
+      }
+     ]
+    },
+    {
+     "tool_calls": [
+      {
+       "name": "list_work_orders",
+       "arguments": {
+        "serial_number": "SN-0057"
+       }
+      }
+     ]
+    },
+    {
+     "final": {
+      "answer": "SN-0057 is IN_BUILD at Bay 3 - Engine Integration. WO-50217 is OPEN and depends on PO-10233.",
+      "claims": [
+       {
+        "text": "SN-0057 is in build at Bay 3.",
+        "facts": [
+         {
+          "system": "MES",
+          "record_type": "serial",
+          "record_id": "SN-0057",
+          "field": "status",
+          "value": "IN_BUILD"
+         },
+         {
+          "system": "MES",
+          "record_type": "serial",
+          "record_id": "SN-0057",
+          "field": "location",
+          "value": "Bay 3 - Engine Integration"
+         }
+        ]
+       },
+       {
+        "text": "WO-50217 is open and waits on PO-10233.",
+        "facts": [
+         {
+          "system": "MES",
+          "record_type": "work_order",
+          "record_id": "WO-50217",
+          "field": "status",
+          "value": "OPEN"
+         },
+         {
+          "system": "MES",
+          "record_type": "work_order",
+          "record_id": "WO-50217",
+          "field": "depends_on_po",
+          "value": "PO-10233"
+         }
+        ]
+       }
+      ],
+      "caveats": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "W2-01",
+   "trigger": "late pos from apex castings",
+   "steps": [
+    {
+     "tool_calls": [
+      {
+       "name": "find_supplier",
+       "arguments": {
+        "name": "Apex Castings"
+       }
+      }
+     ]
+    },
+    {
+     "tool_calls": [
+      {
+       "name": "list_pos",
+       "arguments": {
+        "supplier_id": "SUP-007",
+        "status": "OPEN"
+       }
+      }
+     ]
+    },
+    {
+     "tool_calls": [
+      {
+       "name": "list_work_orders",
+       "arguments": {
+        "depends_on_po": "PO-10233"
+       }
+      }
+     ]
+    },
+    {
+     "final": {
+      "answer": "Apex Castings has one late open PO: PO-10233, due 2026-09-15 but now promised 2026-10-20. Two work orders depend on it: WO-50102 (BLOCKED) and WO-50217 (OPEN). PO-10240 is on time.",
+      "claims": [
+       {
+        "text": "PO-10233 from Apex Castings is late.",
+        "facts": [
+         {
+          "system": "ERP",
+          "record_type": "supplier",
+          "record_id": "SUP-007",
+          "field": "name",
+          "value": "Apex Castings"
+         },
+         {
+          "system": "ERP",
+          "record_type": "purchase_order",
+          "record_id": "PO-10233",
+          "field": "status",
+          "value": "OPEN"
+         },
+         {
+          "system": "ERP",
+          "record_type": "purchase_order",
+          "record_id": "PO-10233",
+          "field": "due_date",
+          "value": "2026-09-15"
+         },
+         {
+          "system": "ERP",
+          "record_type": "purchase_order",
+          "record_id": "PO-10233",
+          "field": "promised_date",
+          "value": "2026-10-20"
+         }
+        ]
+       },
+       {
+        "text": "WO-50102 and WO-50217 depend on PO-10233.",
+        "facts": [
+         {
+          "system": "MES",
+          "record_type": "work_order",
+          "record_id": "WO-50102",
+          "field": "depends_on_po",
+          "value": "PO-10233"
+         },
+         {
+          "system": "MES",
+          "record_type": "work_order",
+          "record_id": "WO-50217",
+          "field": "depends_on_po",
+          "value": "PO-10233"
+         }
+        ]
+       },
+       {
+        "text": "PO-10240 is on time.",
+        "facts": [
+         {
+          "system": "ERP",
+          "record_type": "purchase_order",
+          "record_id": "PO-10240",
+          "field": "due_date",
+          "value": "2026-11-01"
+         },
+         {
+          "system": "ERP",
+          "record_type": "purchase_order",
+          "record_id": "PO-10240",
+          "field": "promised_date",
+          "value": "2026-11-01"
+         }
+        ]
+       }
+      ],
+      "caveats": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "W4-03",
+   "trigger": "does sn-0101 have any ncrs?",
+   "steps": [
+    {
+     "tool_calls": [
+      {
+       "name": "list_ncrs",
+       "arguments": {
+        "serial_number": "SN-0101"
+       }
+      }
+     ]
+    },
+    {
+     "final": {
+      "answer": "SN-0101 has no nonconformances in MES.",
+      "claims": [],
+      "caveats": [
+       "MES returned no NCRs for SN-0101."
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "W5-03",
+   "trigger": "has po-10198 been received?",
+   "steps": [
+    {
+     "tool_calls": [
+      {
+       "name": "get_po",
+       "arguments": {
+        "po_id": "PO-10198"
+       }
+      }
+     ]
+    },
+    {
+     "final": {
+      "answer": "Yes. PO-10198 is RECEIVED; it arrived on 2026-06-28, ahead of its 2026-07-01 due date.",
+      "claims": [
+       {
+        "text": "PO-10198 was received early.",
+        "facts": [
+         {
+          "system": "ERP",
+          "record_type": "purchase_order",
+          "record_id": "PO-10198",
+          "field": "status",
+          "value": "RECEIVED"
+         },
+         {
+          "system": "ERP",
+          "record_type": "purchase_order",
+          "record_id": "PO-10198",
+          "field": "received_on",
+          "value": "2026-06-28"
+         },
+         {
+          "system": "ERP",
+          "record_type": "purchase_order",
+          "record_id": "PO-10198",
+          "field": "due_date",
+          "value": "2026-07-01"
+         }
+        ]
+       }
+      ],
+      "caveats": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "W6-01",
+   "trigger": "ready for stage integration",
+   "steps": [
+    {
+     "tool_calls": [
+      {
+       "name": "list_work_orders",
+       "arguments": {
+        "serial_number": "SN-0042"
+       }
+      }
+     ]
+    },
+    {
+     "tool_calls": [
+      {
+       "name": "list_inspections",
+       "arguments": {
+        "serial_number": "SN-0042"
+       }
+      }
+     ]
+    },
+    {
+     "tool_calls": [
+      {
+       "name": "list_ncrs",
+       "arguments": {
+        "serial_number": "SN-0042",
+        "status": "OPEN"
+       }
+      }
+     ]
+    },
+    {
+     "final": {
+      "answer": "No. SN-0042 is not ready for stage integration: WO-50102 is BLOCKED, WO-50103 is OPEN and NCR-0311 is still OPEN. Inspection INS-7001 passed.",
+      "claims": [
+       {
+        "text": "Two work orders are not closed.",
+        "facts": [
+         {
+          "system": "MES",
+          "record_type": "work_order",
+          "record_id": "WO-50102",
+          "field": "status",
+          "value": "BLOCKED"
+         },
+         {
+          "system": "MES",
+          "record_type": "work_order",
+          "record_id": "WO-50103",
+          "field": "status",
+          "value": "OPEN"
+         }
+        ]
+       },
+       {
+        "text": "NCR-0311 is still open.",
+        "facts": [
+         {
+          "system": "MES",
+          "record_type": "ncr",
+          "record_id": "NCR-0311",
+          "field": "status",
+          "value": "OPEN"
+         }
+        ]
+       },
+       {
+        "text": "Inspection INS-7001 passed.",
+        "facts": [
+         {
+          "system": "MES",
+          "record_type": "inspection",
+          "record_id": "INS-7001",
+          "field": "result",
+          "value": "PASS"
+         }
+        ]
+       }
+      ],
+      "caveats": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "W6-02",
+   "trigger": "is sn-0101 ready to ship?",
+   "steps": [
+    {
+     "tool_calls": [
+      {
+       "name": "list_work_orders",
+       "arguments": {
+        "serial_number": "SN-0101"
+       }
+      }
+     ]
+    },
+    {
+     "tool_calls": [
+      {
+       "name": "list_inspections",
+       "arguments": {
+        "serial_number": "SN-0101"
+       }
+      }
+     ]
+    },
+    {
+     "tool_calls": [
+      {
+       "name": "list_ncrs",
+       "arguments": {
+        "serial_number": "SN-0101",
+        "status": "OPEN"
+       }
+      }
+     ]
+    },
+    {
+     "final": {
+      "answer": "Yes. SN-0101's only work order WO-50300 is CLOSED and inspection INS-7002 passed; MES shows no open NCRs.",
+      "claims": [
+       {
+        "text": "WO-50300 is closed.",
+        "facts": [
+         {
+          "system": "MES",
+          "record_type": "work_order",
+          "record_id": "WO-50300",
+          "field": "status",
+          "value": "CLOSED"
+         }
+        ]
+       },
+       {
+        "text": "INS-7002 passed.",
+        "facts": [
+         {
+          "system": "MES",
+          "record_type": "inspection",
+          "record_id": "INS-7002",
+          "field": "result",
+          "value": "PASS"
+         }
+        ]
+       }
+      ],
+      "caveats": [
+       "MES returned no open NCRs for SN-0101."
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "repairable output test",
+   "trigger": "repairable output test",
+   "steps": [
+    {
+     "tool_calls": [
+      {
+       "name": "get_serial",
+       "arguments": {
+        "serial_number": "SN-0042"
+       }
+      }
+     ]
+    },
+    {
+     "raw": "Sure! SN-0042 is in build."
+    },
+    {
+     "final": {
+      "answer": "SN-0042 is IN_BUILD.",
+      "claims": [
+       {
+        "text": "SN-0042 is in build.",
+        "facts": [
+         {
+          "system": "MES",
+          "record_type": "serial",
+          "record_id": "SN-0042",
+          "field": "status",
+          "value": "IN_BUILD"
+         }
+        ]
+       }
+      ],
+      "caveats": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "malformed output test",
+   "trigger": "malformed output test",
+   "steps": [
+    {
+     "tool_calls": [
+      {
+       "name": "get_serial",
+       "arguments": {
+        "serial_number": "SN-0042"
+       }
+      }
+     ]
+    },
+    {
+     "raw": "Sure!"
+    },
+    {
+     "raw": "Still not JSON."
+    }
+   ]
+  },
+  {
+   "id": "W4-01",
+   "trigger": "open nonconformances",
+   "steps": [
+    {
+     "tool_calls": [
+      {
+       "name": "list_ncrs",
+       "arguments": {
+        "serial_number": "SN-0042",
+        "status": "OPEN"
+       }
+      }
+     ]
+    },
+    {
+     "final": {
+      "answer": "SN-0042 has one open nonconformance: NCR-0311 (MAJOR), Porosity in casting flange, against REQ-118.",
+      "claims": [
+       {
+        "text": "NCR-0311 is an open major NCR against REQ-118.",
+        "facts": [
+         {
+          "system": "MES",
+          "record_type": "ncr",
+          "record_id": "NCR-0311",
+          "field": "status",
+          "value": "OPEN"
+         },
+         {
+          "system": "MES",
+          "record_type": "ncr",
+          "record_id": "NCR-0311",
+          "field": "severity",
+          "value": "MAJOR"
+         },
+         {
+          "system": "MES",
+          "record_type": "ncr",
+          "record_id": "NCR-0311",
+          "field": "description",
+          "value": "Porosity in casting flange"
+         },
+         {
+          "system": "MES",
+          "record_type": "ncr",
+          "record_id": "NCR-0311",
+          "field": "requirement_id",
+          "value": "REQ-118"
+         }
+        ]
+       }
+      ],
+      "caveats": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "inducer details test",
+   "trigger": "inducer details test",
+   "steps": [
+    {
+     "tool_calls": [
+      {
+       "name": "get_part",
+       "arguments": {
+        "part_number": "P-1077"
+       }
+      }
+     ]
+    },
+    {
+     "final": {
+      "answer": "P-1077 has an inducer blade angle of 11.5 deg.",
+      "claims": [
+       {
+        "text": "P-1077's inducer blade angle is 11.5 deg.",
+        "facts": [
+         {
+          "system": "PLM",
+          "record_type": "part",
+          "record_id": "P-1077",
+          "field": "controlled_notes",
+          "value": "Inducer blade angle 11.5 deg; CMM tolerance 0.02 mm"
+         }
+        ]
+       }
+      ],
+      "caveats": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "missing caveat test",
+   "trigger": "missing caveat test",
+   "steps": [
+    {
+     "tool_calls": [
+      {
+       "name": "get_serial",
+       "arguments": {
+        "serial_number": "SN-0404"
+       }
+      }
+     ]
+    },
+    {
+     "final": {
+      "answer": "SN-0404 is in Bay 1.",
+      "claims": [],
+      "caveats": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "W5-01",
+   "trigger": "status of po-10233",
+   "steps": [
+    {
+     "tool_calls": [
+      {
+       "name": "get_po",
+       "arguments": {
+        "po_id": "PO-10233"
+       }
+      }
+     ]
+    },
+    {
+     "tool_calls": [
+      {
+       "name": "get_supplier",
+       "arguments": {
+        "supplier_id": "SUP-007"
+       }
+      }
+     ]
+    },
+    {
+     "final": {
+      "answer": "PO-10233 from Apex Castings is OPEN and late: it was due 2026-09-15 and is now promised for 2026-10-20.",
+      "claims": [
+       {
+        "text": "PO-10233 is open and promised after its due date.",
+        "facts": [
+         {
+          "system": "ERP",
+          "record_type": "purchase_order",
+          "record_id": "PO-10233",
+          "field": "status",
+          "value": "OPEN"
+         },
+         {
+          "system": "ERP",
+          "record_type": "purchase_order",
+          "record_id": "PO-10233",
+          "field": "due_date",
+          "value": "2026-09-15"
+         },
+         {
+          "system": "ERP",
+          "record_type": "purchase_order",
+          "record_id": "PO-10233",
+          "field": "promised_date",
+          "value": "2026-10-20"
+         },
+         {
+          "system": "ERP",
+          "record_type": "purchase_order",
+          "record_id": "PO-10233",
+          "field": "supplier_id",
+          "value": "SUP-007"
+         },
+         {
+          "system": "ERP",
+          "record_type": "supplier",
+          "record_id": "SUP-007",
+          "field": "name",
+          "value": "Apex Castings"
+         }
+        ]
+       }
+      ],
+      "caveats": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "uncited claim test",
+   "trigger": "uncited claim test",
+   "steps": [
+    {
+     "tool_calls": [
+      {
+       "name": "get_serial",
+       "arguments": {
+        "serial_number": "SN-0042"
+       }
+      }
+     ]
+    },
+    {
+     "final": {
+      "answer": "SN-0042 is in build.",
+      "claims": [
+       {
+        "text": "SN-0042 is in build.",
+        "facts": []
+       }
+      ],
+      "caveats": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "W1-03",
+   "trigger": "where is sn-0101?",
+   "steps": [
+    {
+     "tool_calls": [
+      {
+       "name": "get_serial",
+       "arguments": {
+        "serial_number": "SN-0101"
+       }
+      }
+     ]
+    },
+    {
+     "tool_calls": [
+      {
+       "name": "list_work_orders",
+       "arguments": {
+        "serial_number": "SN-0101"
+       }
+      }
+     ]
+    },
+    {
+     "final": {
+      "answer": "SN-0101 is COMPLETE in Stores - Building 2. Its only work order, WO-50300, is CLOSED.",
+      "claims": [
+       {
+        "text": "SN-0101 is complete and in stores.",
+        "facts": [
+         {
+          "system": "MES",
+          "record_type": "serial",
+          "record_id": "SN-0101",
+          "field": "status",
+          "value": "COMPLETE"
+         },
+         {
+          "system": "MES",
+          "record_type": "serial",
+          "record_id": "SN-0101",
+          "field": "location",
+          "value": "Stores - Building 2"
+         }
+        ]
+       },
+       {
+        "text": "WO-50300 is closed.",
+        "facts": [
+         {
+          "system": "MES",
+          "record_type": "work_order",
+          "record_id": "WO-50300",
+          "field": "status",
+          "value": "CLOSED"
+         }
+        ]
+       }
+      ],
+      "caveats": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "W1-04",
+   "trigger": "where is sn-0404?",
+   "steps": [
+    {
+     "tool_calls": [
+      {
+       "name": "get_serial",
+       "arguments": {
+        "serial_number": "SN-0404"
+       }
+      }
+     ]
+    },
+    {
+     "final": {
+      "answer": "I couldn't find SN-0404 in MES.",
+      "claims": [],
+      "caveats": [
+       "SN-0404 was not found in MES."
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "W5-04",
+   "trigger": "is po-10410 late?",
+   "steps": [
+    {
+     "tool_calls": [
+      {
+       "name": "get_po",
+       "arguments": {
+        "po_id": "PO-10410"
+       }
+      }
+     ]
+    },
+    {
+     "tool_calls": [
+      {
+       "name": "get_supplier",
+       "arguments": {
+        "supplier_id": "SUP-019"
+       }
+      }
+     ]
+    },
+    {
+     "final": {
+      "answer": "Yes. PO-10410 from Cryo Valve Works is OPEN and past its 2026-09-20 due date.",
+      "claims": [
+       {
+        "text": "PO-10410 is open and past due.",
+        "facts": [
+         {
+          "system": "ERP",
+          "record_type": "purchase_order",
+          "record_id": "PO-10410",
+          "field": "status",
+          "value": "OPEN"
+         },
+         {
+          "system": "ERP",
+          "record_type": "purchase_order",
+          "record_id": "PO-10410",
+          "field": "due_date",
+          "value": "2026-09-20"
+         },
+         {
+          "system": "ERP",
+          "record_type": "supplier",
+          "record_id": "SUP-019",
+          "field": "name",
+          "value": "Cryo Valve Works"
+         }
+        ]
+       }
+      ],
+      "caveats": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "ghost serial test",
+   "trigger": "ghost serial test",
+   "steps": [
+    {
+     "tool_calls": [
+      {
+       "name": "get_serial",
+       "arguments": {
+        "serial_number": "SN-0042"
+       }
+      }
+     ]
+    },
+    {
+     "final": {
+      "answer": "SN-0042 is IN_BUILD. Its sister unit SN-9999 is complete.",
+      "claims": [
+       {
+        "text": "SN-0042 is in build.",
+        "facts": [
+         {
+          "system": "MES",
+          "record_type": "serial",
+          "record_id": "SN-0042",
+          "field": "status",
+          "value": "IN_BUILD"
+         }
+        ]
+       }
+      ],
+      "caveats": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "wrong status test",
+   "trigger": "wrong status test",
+   "steps": [
+    {
+     "tool_calls": [
+      {
+       "name": "get_serial",
+       "arguments": {
+        "serial_number": "SN-0042"
+       }
+      }
+     ]
+    },
+    {
+     "final": {
+      "answer": "SN-0042 has shipped.",
+      "claims": [
+       {
+        "text": "SN-0042 has shipped.",
+        "facts": [
+         {
+          "system": "MES",
+          "record_type": "serial",
+          "record_id": "SN-0042",
+          "field": "status",
+          "value": "SHIPPED"
+         }
+        ]
+       }
+      ],
+      "caveats": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "W1-01",
+   "trigger": "where is sn-0042",
+   "steps": [
+    {
+     "tool_calls": [
+      {
+       "name": "get_serial",
+       "arguments": {
+        "serial_number": "SN-0042"
+       }
+      }
+     ]
+    },
+    {
+     "tool_calls": [
+      {
+       "name": "list_work_orders",
+       "arguments": {
+        "serial_number": "SN-0042"
+       }
+      }
+     ]
+    },
+    {
+     "final": {
+      "answer": "SN-0042 is IN_BUILD at Bay 3 - Engine Integration. It is blocked by WO-50102 (Awaiting inducer housing castings), which depends on PO-10233. WO-50103 is still OPEN.",
+      "claims": [
+       {
+        "text": "SN-0042 is in build at Bay 3.",
+        "facts": [
+         {
+          "system": "MES",
+          "record_type": "serial",
+          "record_id": "SN-0042",
+          "field": "status",
+          "value": "IN_BUILD"
+         },
+         {
+          "system": "MES",
+          "record_type": "serial",
+          "record_id": "SN-0042",
+          "field": "location",
+          "value": "Bay 3 - Engine Integration"
+         }
+        ]
+       },
+       {
+        "text": "WO-50102 is blocked waiting for castings on PO-10233.",
+        "facts": [
+         {
+          "system": "MES",
+          "record_type": "work_order",
+          "record_id": "WO-50102",
+          "field": "status",
+          "value": "BLOCKED"
+         },
+         {
+          "system": "MES",
+          "record_type": "work_order",
+          "record_id": "WO-50102",
+          "field": "blocked_reason",
+          "value": "Awaiting inducer housing castings"
+         },
+         {
+          "system": "MES",
+          "record_type": "work_order",
+          "record_id": "WO-50102",
+          "field": "depends_on_po",
+          "value": "PO-10233"
+         }
+        ]
+       },
+       {
+        "text": "WO-50103 is open.",
+        "facts": [
+         {
+          "system": "MES",
+          "record_type": "work_order",
+          "record_id": "WO-50103",
+          "field": "status",
+          "value": "OPEN"
+         }
+        ]
+       }
+      ],
+      "caveats": []
+     }
+    }
+   ]
+  }
+ ]
+}

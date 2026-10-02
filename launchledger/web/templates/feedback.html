@@ -1,0 +1,7 @@
+{% extends "base.html" %}
+{% block title %}Feedback{% endblock %}
+{% block content %}
+<h1>Feedback triage</h1>
+<p class="muted">Thumbs-down reports from users. Move each through New, Triaged, Fixed, Verified, and turn real bugs into eval cases.</p>
+{% include "_feedback_list.html" %}
+{% endblock %}

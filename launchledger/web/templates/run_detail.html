@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+{% block title %}Run {{ run.id }}{% endblock %}
+{% block content %}
+<h1>Run {{ run.id }}</h1>
+<p class="muted">{{ run.question }} · model {{ run.model }} · {{ run.created_at }}</p>
+{% include "_answer_card.html" %}
+<h2>Guardrails</h2>
+<div class="panel">
+  {% for g in run.guardrails %}
+  <div data-testid="guardrail-result" data-rule="{{ g.rule }}" data-passed="{{ 'true' if g.passed else 'false' }}">
+    <span class="badge {{ 'answered' if g.passed else 'blocked' }}">{{ 'pass' if g.passed else 'fail' }}</span>
+    <code>{{ g.rule }}</code> {% if g.detail %}<span class="muted">{{ g.detail }}</span>{% endif %}
+  </div>
+  {% else %}
+  <p class="muted">Guardrails did not run (the run ended before a final answer).</p>
+  {% endfor %}
+</div>
+<h2>Trace</h2>
+<div class="panel">
+  {% for st in run.steps %}
+  {% set failed = (st.kind == 'contract' and st.contract == 'fail') or (st.kind == 'guardrail' and not st.passed) %}
+  <div class="step {{ st.kind }} {{ 'fail' if failed }}" data-testid="trace-step" data-kind="{{ st.kind }}"
+       {% if st.kind == 'llm' %}data-purpose="{{ st.purpose }}"{% if st.repair %} data-repair="true"{% endif %}{% endif %}>
+    <strong>{{ st.seq }}. {{ st.kind }}</strong>
+    {% if st.kind == 'llm' %}
+      <span class="muted">{{ st.purpose }} · {{ st.model }}{% if st.repair %} · repair{% endif %} · {{ st.latency_ms }} ms{% if st.tokens %} · {{ st.tokens }} tokens{% endif %}</span>
+      <pre>{{ st.response|tojson(indent=2) }}</pre>
+    {% elif st.kind == 'tool' %}
+      <span><code>{{ st.tool }}</code> GET {{ st.path or st.endpoint }} → {{ st.status }} ({{ st.http_status }}) · {{ st.latency_ms }} ms</span>
+      <pre>{{ st.result|tojson(indent=2) }}</pre>
+    {% elif st.kind == 'contract' %}
+      <span>{{ st.system|upper }} {{ st.endpoint }}: contract {{ st.contract }}</span>
+      {% for v in st.violations or [] %}<div class="muted">{{ v.problem }}</div>{% endfor %}
+      {% if st.gated_by %}<div class="muted">gated by open incident on {{ st.gated_by.field }}</div>{% endif %}
+    {% elif st.kind == 'guardrail' %}
+      <span><code>{{ st.rule }}</code> {{ 'pass' if st.passed else 'fail' }} {{ st.detail }}</span>
+    {% endif %}
+  </div>
+  {% endfor %}
+</div>
+{% endblock %}

@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% block title %}Evals{% endblock %}
+{% block content %}
+<h1>Evals</h1>
+<form class="panel row" hx-post="/api/evals/run" hx-target="#eval-detail" hx-swap="innerHTML">
+  <input type="hidden" name="model" value="mock">
+  <label for="drift" class="muted">Drift scenario</label>
+  <select id="drift" name="drift" data-testid="evals-drift-select">
+    <option value="none">none</option>
+    {% for s in scenarios %}<option value="{{ s.name }}">{{ s.name }}</option>{% endfor %}
+  </select>
+  <button type="submit" class="primary" data-testid="evals-run-mock">Run mock suite</button>
+  <span class="muted">Real models: <code>ll eval run --model &lt;slug&gt;</code></span>
+</form>
+<div id="eval-detail"></div>
+<h2>Recent eval runs</h2>
+<div class="panel table-wrap">
+<table>
+  <thead><tr><th>#</th><th>Model</th><th>Drift</th><th>Status</th><th>Passed</th><th>Declined</th><th>Wrong</th></tr></thead>
+  <tbody>
+  {% for r in runs %}
+  <tr data-testid="eval-run-row" data-eval-id="{{ r.id }}">
+    <td><a href="/evals/{{ r.id }}">{{ r.id }}</a></td><td>{{ r.model }}</td><td>{{ r.drift_scenario or '—' }}</td>
+    <td>{{ r.status }}</td><td>{{ r.passed }}/{{ r.total }}</td><td>{{ r.declined }}</td><td>{{ r.wrong }}</td>
+  </tr>
+  {% else %}
+  <tr><td colspan="7" class="muted">No eval runs yet.</td></tr>
+  {% endfor %}
+  </tbody>
+</table>
+</div>
+{% endblock %}

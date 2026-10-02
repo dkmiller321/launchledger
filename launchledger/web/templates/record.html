@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% block title %}{{ record_id }}{% endblock %}
+{% block content %}
+<h1>{{ system|upper }} {{ record_type }} {{ record_id }}</h1>
+<div class="panel table-wrap" data-testid="record-view" data-system="{{ system }}" data-type="{{ record_type }}" data-id="{{ record_id }}">
+  <table>
+    {% for key, value in record.items() %}
+    <tr data-testid="record-field" data-field="{{ key }}"><th>{{ key }}</th><td>{{ value if value is not none else '—' }}</td></tr>
+    {% endfor %}
+  </table>
+</div>
+<p><a href="javascript:history.back()">Back</a></p>
+{% endblock %}

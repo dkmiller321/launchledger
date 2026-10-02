@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% block title %}Runs{% endblock %}
+{% block content %}
+<h1>Runs</h1>
+<form method="get" action="/runs" class="row">
+  <label for="decision" class="muted">Decision</label>
+  <select id="decision" name="decision" data-testid="runs-filter-decision" onchange="this.form.submit()">
+    {% for d in ['all', 'answered', 'declined', 'blocked'] %}
+    <option value="{{ d }}" {% if d == decision %}selected{% endif %}>{{ d }}</option>
+    {% endfor %}
+  </select>
+</form>
+<div class="panel table-wrap">
+<table data-testid="runs-table">
+  <thead><tr><th>#</th><th>Question</th><th>Workflow</th><th>Decision</th><th>Model</th><th>When</th></tr></thead>
+  <tbody>
+  {% for r in runs %}
+  <tr data-testid="run-row" data-run-id="{{ r.id }}" data-decision="{{ r.decision }}">
+    <td><a href="/runs/{{ r.id }}">{{ r.id }}</a></td><td>{{ r.question }}</td>
+    <td>{{ r.workflow or '—' }}</td><td><span class="badge {{ r.decision }}">{{ r.decision|capitalize }}</span></td>
+    <td class="muted">{{ r.model }}</td><td class="muted">{{ r.created_at }}</td>
+  </tr>
+  {% else %}
+  <tr><td colspan="6" class="muted">No runs yet.</td></tr>
+  {% endfor %}
+  </tbody>
+</table>
+</div>
+{% endblock %}

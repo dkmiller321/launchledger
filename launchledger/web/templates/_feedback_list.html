@@ -1,0 +1,39 @@
+<div id="feedback-list">
+{% for f in items %}
+<div class="panel" data-testid="feedback-row" data-feedback-id="{{ f.id }}" data-status="{{ f.status }}">
+  <div class="row">
+    <strong>#{{ f.id }}</strong>
+    <span class="chip">{{ f.status_label }}</span>
+    <span class="badge blocked">{{ f.reason_label }}</span>
+    <a href="/runs/{{ f.run_id }}">run {{ f.run_id }}</a>
+    <span class="muted">{{ f.created_at[:16] }}</span>
+  </div>
+  <p>{{ f.question }}</p>
+  {% if f.text %}<p class="muted">“{{ f.text }}”</p>{% endif %}
+  <form class="row" hx-post="/api/feedback/{{ f.id }}" hx-target="#feedback-list" hx-swap="outerHTML">
+    <label class="muted">Status
+      <select name="status" data-testid="feedback-status-select">
+        {% for key, label in statuses.items() %}<option value="{{ key }}" {% if key == f.status %}selected{% endif %}>{{ label }}</option>{% endfor %}
+      </select>
+    </label>
+    <label class="muted">Disposition
+      <select name="disposition" data-testid="feedback-disposition-select">
+        <option value="" {% if not f.disposition %}selected{% endif %}>—</option>
+        {% for key, label in dispositions.items() %}<option value="{{ key }}" {% if key == f.disposition %}selected{% endif %}>{{ label }}</option>{% endfor %}
+      </select>
+    </label>
+    <button type="submit" data-testid="feedback-save">Save</button>
+    <button type="button" data-testid="feedback-convert" hx-post="/api/feedback/{{ f.id }}/convert"
+            hx-target="#convert-{{ f.id }}" hx-swap="innerHTML">Convert to eval case</button>
+    <span id="convert-{{ f.id }}"></span>
+  </form>
+  {% if f.events %}
+  <ul class="muted">
+    {% for e in f.events %}<li data-testid="feedback-event">{{ e.at[:16] }}: {{ e.from }} → {{ e.to }}{% if e.disposition %} ({{ e.disposition }}){% endif %}</li>{% endfor %}
+  </ul>
+  {% endif %}
+</div>
+{% else %}
+<p class="panel muted">No feedback yet.</p>
+{% endfor %}
+</div>

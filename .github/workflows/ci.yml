@@ -1,0 +1,55 @@
+name: ci
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_USER: launchledger
+          POSTGRES_PASSWORD: change-me
+          POSTGRES_DB: launchledger
+        ports: ["55432:5432"]
+        options: >-
+          --health-cmd "pg_isready -U launchledger" --health-interval 2s
+          --health-timeout 3s --health-retries 30
+    env:
+      DATABASE_URL: postgresql+psycopg://launchledger:change-me@127.0.0.1:55432/launchledger
+      TEST_DATABASE_URL: postgresql+psycopg://launchledger:change-me@127.0.0.1:55432/launchledger_test
+      LLM_MODE: mock
+      FROZEN_TODAY: "2026-10-01"
+      DRIFT_INJECTION: "1"
+      MOCK_LATENCY_MS: "0"
+      DRIFT_MONITOR_INTERVAL_S: "0"
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v5
+      - run: uv python install 3.12 && uv sync --frozen
+      - name: Lint and types
+        run: uv run ruff check . && uv run ruff format --check . && uv run mypy
+      - name: Migrate, seed, baseline
+        run: uv run alembic upgrade head && uv run ll seed && uv run ll drift baseline
+      - name: Unit and integration
+        run: uv run pytest tests
+      - name: Mock eval suite
+        run: uv run ll eval run --model mock
+      - name: Drift-mode evals
+        run: |
+          uv run ll eval run --model mock --drift erp_rename_promised_date
+          uv run ll eval run --model mock --drift mes_new_wo_status
+          uv run ll eval run --model mock --drift erp_cost_in_cents
+      - name: Browsers
+        run: uv run playwright install --with-deps chromium
+      - name: E2E
+        run: uv run pytest e2e -m "not smoke"
+      - uses: actions/upload-artifact@v4
+        if: failure()
+        with:
+          name: test-results
+          path: test-results/

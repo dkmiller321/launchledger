@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="htmx-config" content='{"includeIndicatorStyles": false}'>
+  <title>{% block title %}LaunchLedger{% endblock %} · LaunchLedger</title>
+  <link rel="stylesheet" href="/static/app.css">
+  <script src="/static/htmx.min.js"></script>
+</head>
+<body>
+  <header class="topbar">
+    <a class="brand" href="/">LaunchLedger <span class="muted">Halcyon Aerospace</span></a>
+    <nav>
+      <a data-testid="nav-ask" href="/" {% if active == 'ask' %}aria-current="page"{% endif %}>Ask</a>
+      <a data-testid="nav-runs" href="/runs" {% if active == 'runs' %}aria-current="page"{% endif %}>Runs</a>
+      <a data-testid="nav-evals" href="/evals" {% if active == 'evals' %}aria-current="page"{% endif %}>Evals</a>
+      <a data-testid="nav-drift" href="/drift" {% if active == 'drift' %}aria-current="page"{% endif %}>Drift</a>
+      <a data-testid="nav-feedback" href="/feedback" {% if active == 'feedback' %}aria-current="page"{% endif %}>Feedback</a>
+      <a data-testid="nav-dashboard" href="/dashboard" {% if active == 'dashboard' %}aria-current="page"{% endif %}>Dashboard</a>
+    </nav>
+  </header>
+  <main>
+    {% block content %}{% endblock %}
+  </main>
+</body>
+</html>

@@ -1,0 +1,125 @@
+- id: W2-01
+  question: Which open work orders are at risk from late POs from Apex Castings?
+  expected_workflow: supplier_impact
+  expected_decision: answered
+  expected_facts:
+  - system: ERP
+    record_type: supplier
+    record_id: SUP-007
+    field: name
+    value: Apex Castings
+  - system: ERP
+    record_type: purchase_order
+    record_id: PO-10233
+    field: status
+    value: OPEN
+  - system: ERP
+    record_type: purchase_order
+    record_id: PO-10233
+    field: due_date
+    value: '2026-09-15'
+  - system: ERP
+    record_type: purchase_order
+    record_id: PO-10233
+    field: promised_date
+    value: '2026-10-20'
+  - system: MES
+    record_type: work_order
+    record_id: WO-50102
+    field: depends_on_po
+    value: PO-10233
+  - system: MES
+    record_type: work_order
+    record_id: WO-50217
+    field: depends_on_po
+    value: PO-10233
+  - system: ERP
+    record_type: purchase_order
+    record_id: PO-10240
+    field: due_date
+    value: '2026-11-01'
+  - system: ERP
+    record_type: purchase_order
+    record_id: PO-10240
+    field: promised_date
+    value: '2026-11-01'
+  forbidden_values: []
+- id: W2-02
+  question: Are any work orders at risk from late POs from Orbital Fasteners?
+  expected_workflow: supplier_impact
+  expected_decision: answered
+  expected_facts:
+  - system: ERP
+    record_type: supplier
+    record_id: SUP-012
+    field: name
+    value: Orbital Fasteners
+  - system: ERP
+    record_type: purchase_order
+    record_id: PO-10300
+    field: due_date
+    value: '2026-10-15'
+  - system: ERP
+    record_type: purchase_order
+    record_id: PO-10300
+    field: promised_date
+    value: '2026-10-15'
+  forbidden_values: []
+- id: W2-03
+  question: Which work orders are at risk from late POs from Cryo Valve Works?
+  expected_workflow: supplier_impact
+  expected_decision: answered
+  expected_facts:
+  - system: ERP
+    record_type: supplier
+    record_id: SUP-019
+    field: name
+    value: Cryo Valve Works
+  - system: ERP
+    record_type: purchase_order
+    record_id: PO-10410
+    field: status
+    value: OPEN
+  - system: ERP
+    record_type: purchase_order
+    record_id: PO-10410
+    field: due_date
+    value: '2026-09-20'
+  - system: MES
+    record_type: work_order
+    record_id: WO-50410
+    field: depends_on_po
+    value: PO-10410
+  forbidden_values: []
+- id: W2-04
+  question: Which work orders are at risk from late POs from Acme Rockets?
+  expected_workflow: supplier_impact
+  expected_decision: answered
+  expected_facts: []
+  forbidden_values: []
+- id: W2-05
+  question: Which open work orders depend on PO-10233?
+  expected_workflow: supplier_impact
+  expected_decision: answered
+  expected_facts:
+  - system: MES
+    record_type: work_order
+    record_id: WO-50102
+    field: depends_on_po
+    value: PO-10233
+  - system: MES
+    record_type: work_order
+    record_id: WO-50102
+    field: status
+    value: BLOCKED
+  - system: MES
+    record_type: work_order
+    record_id: WO-50217
+    field: depends_on_po
+    value: PO-10233
+  - system: MES
+    record_type: work_order
+    record_id: WO-50217
+    field: status
+    value: OPEN
+  forbidden_values: []

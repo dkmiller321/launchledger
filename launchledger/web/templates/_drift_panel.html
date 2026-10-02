@@ -1,0 +1,43 @@
+<div id="drift-panel">
+  <div class="panel row">
+    {% for name, status in systems %}
+    <span data-testid="drift-system-status" data-system="{{ name }}" data-status="{{ status }}">
+      <span class="status-dot {{ status }}"></span>{{ name|upper }} {{ 'OK' if status == 'green' else 'incident open' }}
+    </span>
+    {% endfor %}
+    <button type="button" data-testid="drift-check-now" hx-post="/api/drift/check" hx-target="#drift-panel" hx-swap="outerHTML">Run drift check now</button>
+  </div>
+
+  {% if injection %}
+  <h2>Inject drift (demo and test only)</h2>
+  <div class="panel">
+    {% for s in scenarios %}
+    <div class="row">
+      <input type="checkbox" id="sc-{{ s.name }}" name="enabled" value="1" data-testid="drift-scenario-toggle" data-scenario="{{ s.name }}"
+             {% if s.name in enabled %}checked{% endif %}
+             hx-post="/api/admin/drift/{{ s.name }}/set" hx-target="#drift-panel" hx-swap="outerHTML">
+      <label for="sc-{{ s.name }}"><code>{{ s.name }}</code> <span class="muted">{{ s.description }} ({{ s.priority }})</span></label>
+    </div>
+    {% endfor %}
+  </div>
+  {% endif %}
+
+  <h2>Incidents</h2>
+  <div class="panel table-wrap">
+  <table>
+    <thead><tr><th>#</th><th>System</th><th>Field</th><th>Kind</th><th>Status</th><th>First seen</th><th>Runs affected</th><th>Detail</th><th></th></tr></thead>
+    <tbody>
+    {% for i in incidents %}
+    <tr data-testid="incident-row" data-incident-id="{{ i.id }}" data-system="{{ i.system }}" data-field="{{ i.field }}" data-kind="{{ i.kind }}" data-status="{{ i.status }}">
+      <td>{{ i.id }}</td><td>{{ i.system|upper }} <span class="muted">{{ i.endpoint }}</span></td><td><code>{{ i.field }}</code></td>
+      <td>{{ i.kind }}</td><td>{{ i.status }}</td><td class="muted">{{ i.first_seen[:19] }}</td>
+      <td data-testid="incident-runs-affected">{{ i.runs_affected }}</td><td class="muted">{{ i.detail }}</td>
+      <td>{% if i.status == 'open' %}<button type="button" data-testid="incident-resolve" hx-post="/api/drift/incidents/{{ i.id }}/resolve" hx-target="#drift-panel" hx-swap="outerHTML">Resolve</button>{% endif %}</td>
+    </tr>
+    {% else %}
+    <tr><td colspan="9" class="muted">No incidents.</td></tr>
+    {% endfor %}
+    </tbody>
+  </table>
+  </div>
+</div>

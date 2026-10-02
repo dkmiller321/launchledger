@@ -1,0 +1,24 @@
+<div class="row feedback" id="fb-{{ run.id }}">
+  <span class="muted">Was this right?</span>
+  <button type="button" data-testid="feedback-up" aria-label="Good answer"
+          hx-post="/api/feedback" hx-vals='{"run_id": "{{ run.id }}", "rating": "up"}'
+          hx-target="#fb-{{ run.id }}" hx-swap="innerHTML">Yes</button>
+  <button type="button" data-testid="feedback-down" aria-label="Report a problem"
+          onclick="this.parentElement.querySelector('form').hidden = false">No</button>
+  <form hidden hx-post="/api/feedback" hx-target="#fb-{{ run.id }}" hx-swap="innerHTML" class="row">
+    <input type="hidden" name="run_id" value="{{ run.id }}">
+    <input type="hidden" name="rating" value="down">
+    <label for="fb-reason-{{ run.id }}" class="muted">Reason</label>
+    <select id="fb-reason-{{ run.id }}" name="reason" data-testid="feedback-reason"
+            onchange="this.form.querySelector('[data-testid=feedback-submit]').disabled = !this.value">
+      <option value="">Choose…</option>
+      <option value="wrong_data">Wrong data</option>
+      <option value="missing_data">Missing data</option>
+      <option value="unclear">Unclear</option>
+      <option value="slow">Slow</option>
+      <option value="other">Other</option>
+    </select>
+    <input type="text" name="text" data-testid="feedback-text" placeholder="What was wrong? (optional)" aria-label="Details">
+    <button type="submit" data-testid="feedback-submit" disabled>Send</button>
+  </form>
+</div>

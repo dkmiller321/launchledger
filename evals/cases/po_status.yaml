@@ -1,0 +1,105 @@
+- id: W5-01
+  question: What's the status of PO-10233 and is it late?
+  expected_workflow: po_status
+  expected_decision: answered
+  expected_facts:
+  - system: ERP
+    record_type: purchase_order
+    record_id: PO-10233
+    field: status
+    value: OPEN
+  - system: ERP
+    record_type: purchase_order
+    record_id: PO-10233
+    field: due_date
+    value: '2026-09-15'
+  - system: ERP
+    record_type: purchase_order
+    record_id: PO-10233
+    field: promised_date
+    value: '2026-10-20'
+  - system: ERP
+    record_type: purchase_order
+    record_id: PO-10233
+    field: supplier_id
+    value: SUP-007
+  - system: ERP
+    record_type: supplier
+    record_id: SUP-007
+    field: name
+    value: Apex Castings
+  forbidden_values: []
+- id: W5-02
+  question: What's the status of PO-10240?
+  expected_workflow: po_status
+  expected_decision: answered
+  expected_facts:
+  - system: ERP
+    record_type: purchase_order
+    record_id: PO-10240
+    field: status
+    value: OPEN
+  - system: ERP
+    record_type: purchase_order
+    record_id: PO-10240
+    field: due_date
+    value: '2026-11-01'
+  - system: ERP
+    record_type: purchase_order
+    record_id: PO-10240
+    field: promised_date
+    value: '2026-11-01'
+  - system: ERP
+    record_type: supplier
+    record_id: SUP-007
+    field: name
+    value: Apex Castings
+  forbidden_values: []
+- id: W5-03
+  question: Has PO-10198 been received?
+  expected_workflow: po_status
+  expected_decision: answered
+  expected_facts:
+  - system: ERP
+    record_type: purchase_order
+    record_id: PO-10198
+    field: status
+    value: RECEIVED
+  - system: ERP
+    record_type: purchase_order
+    record_id: PO-10198
+    field: received_on
+    value: '2026-06-28'
+  - system: ERP
+    record_type: purchase_order
+    record_id: PO-10198
+    field: due_date
+    value: '2026-07-01'
+  forbidden_values: []
+- id: W5-04
+  question: Is PO-10410 late?
+  expected_workflow: po_status
+  expected_decision: answered
+  expected_facts:
+  - system: ERP
+    record_type: purchase_order
+    record_id: PO-10410
+    field: status
+    value: OPEN
+  - system: ERP
+    record_type: purchase_order
+    record_id: PO-10410
+    field: due_date
+    value: '2026-09-20'
+  - system: ERP
+    record_type: supplier
+    record_id: SUP-019
+    field: name
+    value: Cryo Valve Works
+  forbidden_values: []
+- id: W5-05
+  question: What's the status of PO-99999?
+  expected_workflow: po_status
+  expected_decision: answered
+  expected_facts: []
+  forbidden_values: []

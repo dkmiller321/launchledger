@@ -68,7 +68,7 @@ Pre-approved packages (major versions pinned; take the newest minor): `fastapi`,
   tests/ (unit + integration)   e2e/ (pytest-playwright)   scripts/
   ```
 - Core logic is pure and unit-tested in isolation: guardrails, grader, contract checks, drift transforms, late-PO rule, distribution comparison. Routes and CLI only wire them up.
-- Async end to end on the request path. **Never call the system APIs with a sync client from inside a request**: the app calls itself over HTTP, and a sync call deadlocks a single worker. The CLI uses `httpx.ASGITransport` against the app unless `SYSTEMS_BASE_URL` is set.
+- DB access is sync SQLAlchemy run in FastAPI's threadpool (DECISIONS D3: psycopg async does not run on Windows' default event loop). Tool calls use a sync httpx client from those pool threads, so the app calling itself over HTTP cannot deadlock. Never call the system APIs from inside an `async def` without `run_in_threadpool`. The CLI runs the systems in-process (Starlette TestClient) unless `--systems-url` is given.
 - Errors: let exceptions propagate to one handler at the edge. The run loop is the exception: it catches tool/LLM failures and turns them into a Declined decision with the error in the trace. No retry decorators or circuit breakers beyond PRD §5 (one LLM retry on 5xx/429).
 - Logging: stdlib `logging`, module-level loggers.
 - In Docker the app binds `0.0.0.0:8000` inside the container and Compose publishes `127.0.0.1:8000:8000`. Postgres publishes on host port `55432`.

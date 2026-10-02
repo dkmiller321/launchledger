@@ -1,0 +1,25 @@
+<section class="panel" data-testid="answer-card" data-run-id="{{ run.id }}" data-decision="{{ run.decision }}">
+  <div class="row">
+    <span class="badge {{ run.decision }}" data-testid="decision-badge">{{ run.decision|capitalize }}</span>
+    {% if run.workflow %}<span class="chip" data-testid="workflow-chip">{{ run.workflow }}{% if run.workflow_source == 'manual' %} (manual){% endif %}</span>{% endif %}
+    <a data-testid="trace-link" href="/runs/{{ run.id }}">View trace</a>
+  </div>
+  {% if run.decision != 'answered' %}
+    <p class="reason" data-testid="decision-reason">{{ run.decision_reason }}</p>
+  {% else %}
+    <p data-testid="answer-text">{{ run.answer }}</p>
+    {% if run.claims %}
+    <ol class="claims">
+      {% for c in run.claims %}
+      <li data-testid="claim">{{ c.text }}
+        <div class="citations">
+          {% for f in c.facts %}<a data-testid="citation" data-field="{{ f.field }}" href="{{ f.href }}">{{ f.record_id }} · {{ f.field }}</a>{% endfor %}
+        </div>
+      </li>
+      {% endfor %}
+    </ol>
+    {% endif %}
+    {% for cv in run.caveats %}<p class="caveat" data-testid="caveat">{{ cv }}</p>{% endfor %}
+  {% endif %}
+  {% include "_feedback_controls.html" ignore missing %}
+</section>

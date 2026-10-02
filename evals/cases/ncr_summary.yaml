@@ -1,0 +1,110 @@
+- id: W4-01
+  question: What open nonconformances are there against SN-0042?
+  expected_workflow: ncr_summary
+  expected_decision: answered
+  expected_facts:
+  - system: MES
+    record_type: ncr
+    record_id: NCR-0311
+    field: status
+    value: OPEN
+  - system: MES
+    record_type: ncr
+    record_id: NCR-0311
+    field: severity
+    value: MAJOR
+  - system: MES
+    record_type: ncr
+    record_id: NCR-0311
+    field: description
+    value: Porosity in casting flange
+  - system: MES
+    record_type: ncr
+    record_id: NCR-0311
+    field: requirement_id
+    value: REQ-118
+  forbidden_values: []
+- id: W4-02
+  question: List all nonconformances against SN-0042
+  expected_workflow: ncr_summary
+  expected_decision: answered
+  expected_facts:
+  - system: MES
+    record_type: ncr
+    record_id: NCR-0311
+    field: status
+    value: OPEN
+  - system: MES
+    record_type: ncr
+    record_id: NCR-0311
+    field: severity
+    value: MAJOR
+  - system: MES
+    record_type: ncr
+    record_id: NCR-0298
+    field: status
+    value: CLOSED
+  - system: MES
+    record_type: ncr
+    record_id: NCR-0298
+    field: severity
+    value: MINOR
+  forbidden_values: []
+- id: W4-03
+  question: Does SN-0101 have any NCRs?
+  expected_workflow: ncr_summary
+  expected_decision: answered
+  expected_facts: []
+  forbidden_values: []
+- id: W4-04
+  question: Which NCRs are open on part P-2110?
+  expected_workflow: ncr_summary
+  expected_decision: answered
+  expected_facts:
+  - system: MES
+    record_type: ncr
+    record_id: NCR-0320
+    field: status
+    value: OPEN
+  - system: MES
+    record_type: ncr
+    record_id: NCR-0320
+    field: severity
+    value: MINOR
+  - system: MES
+    record_type: ncr
+    record_id: NCR-0320
+    field: serial_number
+    value: SN-0057
+  - system: MES
+    record_type: ncr
+    record_id: NCR-0320
+    field: description
+    value: Flange surface pitting
+  forbidden_values: []
+- id: W4-05
+  question: Show NCR details for SN-0057
+  expected_workflow: ncr_summary
+  expected_decision: answered
+  expected_facts:
+  - system: MES
+    record_type: ncr
+    record_id: NCR-0320
+    field: description
+    value: Flange surface pitting
+  - system: MES
+    record_type: ncr
+    record_id: NCR-0320
+    field: severity
+    value: MINOR
+  - system: MES
+    record_type: ncr
+    record_id: NCR-0320
+    field: status
+    value: OPEN
+  - system: MES
+    record_type: ncr
+    record_id: NCR-0320
+    field: requirement_id
+    value: REQ-118
+  forbidden_values: []

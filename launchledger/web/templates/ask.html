@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% block title %}Ask{% endblock %}
+{% block content %}
+<h1>Ask the factory</h1>
+<form class="ask panel" hx-post="/api/ask" hx-target="#answer-slot" hx-swap="innerHTML"
+      hx-indicator="#run-pending" hx-disabled-elt="find button">
+  <label for="question" class="muted">Question about parts, serials, work orders, NCRs or POs</label>
+  <textarea id="question" name="question" data-testid="ask-input" required
+            placeholder="Where is SN-0042 and what's blocking it?"></textarea>
+  <div class="row">
+    <label for="workflow" class="muted">Workflow</label>
+    <select id="workflow" name="workflow" data-testid="workflow-select">
+      <option value="auto">auto</option>
+      {% for w in workflows %}<option value="{{ w.name }}">{{ w.name }}</option>{% endfor %}
+    </select>
+    <button type="submit" class="primary" data-testid="ask-submit">Ask</button>
+    <span id="run-pending" data-testid="run-pending" class="pending" role="status">Running…</span>
+  </div>
+  <div class="row muted">
+    Try:
+    {% for q in examples %}
+    <button type="button" class="example" onclick="document.getElementById('question').value=this.textContent">{{ q }}</button>
+    {% endfor %}
+  </div>
+</form>
+<div id="answer-slot"></div>
+{% endblock %}

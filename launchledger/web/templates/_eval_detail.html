@@ -1,0 +1,36 @@
+<section class="panel" data-eval-id="{{ e.id }}"
+  {% if e.status == 'running' %}hx-get="/evals/{{ e.id }}/partial" hx-trigger="every 1s" hx-swap="outerHTML"{% endif %}>
+  <div class="row">
+    <strong>Eval run {{ e.id }}</strong>
+    <span class="muted">model {{ e.model }}{% if e.drift_scenario %} · drift {{ e.drift_scenario }}{% endif %}</span>
+    <span class="chip" data-testid="eval-status">{{ e.status }}</span>
+  </div>
+  <div class="row">
+    <span>Passed <strong data-testid="eval-pass-count">{{ e.passed }}/{{ e.total }}</strong></span>
+    <span>Declined <strong data-testid="eval-declined-count">{{ e.declined }}</strong></span>
+    <span>Wrong <strong data-testid="eval-wrong-count">{{ e.wrong }}</strong></span>
+  </div>
+  {% if e.workflows %}
+  <div class="row">
+    {% for name, c in e.workflows %}
+    <span class="chip">{{ name }} <span data-testid="eval-pass-rate" data-workflow="{{ name }}">{{ c.passed }}/{{ c.total }}</span></span>
+    {% endfor %}
+  </div>
+  {% endif %}
+  {% if e.cases %}
+  <div class="table-wrap">
+  <table>
+    <thead><tr><th>Case</th><th>Workflow</th><th>Decision</th><th>Outcome</th><th>Diff</th></tr></thead>
+    <tbody>
+    {% for c in e.cases %}
+    <tr data-testid="eval-case-row" data-case-id="{{ c.case_id }}" data-passed="{{ 'true' if c.passed else 'false' }}">
+      <td>{% if c.run_id %}<a href="/runs/{{ c.run_id }}">{{ c.case_id }}</a>{% else %}{{ c.case_id }}{% endif %}{% if c.draft %} <span class="muted">draft</span>{% endif %}</td>
+      <td>{{ c.workflow }}</td><td>{{ c.decision }}</td><td>{{ c.outcome }}</td>
+      <td>{% if c.diff %}<div data-testid="eval-case-diff">{% for d in c.diff %}<div>{{ d }}</div>{% endfor %}</div>{% endif %}</td>
+    </tr>
+    {% endfor %}
+    </tbody>
+  </table>
+  </div>
+  {% endif %}
+</section>

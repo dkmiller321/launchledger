@@ -1,0 +1,80 @@
+- id: W3-01
+  question: Which assemblies use part P-1077?
+  expected_workflow: where_used
+  expected_decision: answered
+  expected_facts:
+  - system: PLM
+    record_type: bom_line
+    record_id: BL-0001
+    field: parent_pn
+    value: P-2001
+  - system: PLM
+    record_type: bom_line
+    record_id: BL-0001
+    field: qty
+    value: 1
+  - system: PLM
+    record_type: bom_line
+    record_id: BL-0002
+    field: parent_pn
+    value: P-2110
+  - system: PLM
+    record_type: bom_line
+    record_id: BL-0002
+    field: qty
+    value: 1
+  forbidden_values: []
+- id: W3-02
+  question: Which assemblies use part P-3300?
+  expected_workflow: where_used
+  expected_decision: answered
+  expected_facts:
+  - system: PLM
+    record_type: bom_line
+    record_id: BL-0003
+    field: parent_pn
+    value: P-2001
+  - system: PLM
+    record_type: bom_line
+    record_id: BL-0003
+    field: qty
+    value: 1
+  forbidden_values: []
+- id: W3-03
+  question: What's in the bill of materials for P-2001?
+  expected_workflow: where_used
+  expected_decision: answered
+  expected_facts:
+  - system: PLM
+    record_type: bom_line
+    record_id: BL-0001
+    field: child_pn
+    value: P-1077
+  - system: PLM
+    record_type: bom_line
+    record_id: BL-0001
+    field: qty
+    value: 1
+  - system: PLM
+    record_type: bom_line
+    record_id: BL-0003
+    field: child_pn
+    value: P-3300
+  - system: PLM
+    record_type: bom_line
+    record_id: BL-0003
+    field: qty
+    value: 1
+  forbidden_values: []
+- id: W3-04
+  question: Which assemblies use part P-1500?
+  expected_workflow: where_used
+  expected_decision: answered
+  expected_facts: []
+  forbidden_values: []
+- id: W3-05
+  question: Which assemblies use part P-9999?
+  expected_workflow: where_used
+  expected_decision: answered
+  expected_facts: []
+  forbidden_values: []
