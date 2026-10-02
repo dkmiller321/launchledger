@@ -58,7 +58,8 @@ async (page) => {
   await page.goto(base + '/evals');
   await t('evals-run-mock').click();
   await page.waitForFunction(() => document.querySelector('[data-testid=eval-status]')?.textContent.trim() === 'complete', null, { timeout: 90000 });
-  log('E2E-18', (await t('eval-pass-count').textContent()).trim() === '30/30', `pass ${(await t('eval-pass-count').textContent()).trim()}`);
+  const [passed, total] = (await t('eval-pass-count').textContent()).trim().split('/').map(Number);
+  log('E2E-18', total >= 30 && passed === total, `pass ${passed}/${total}`);  // N/N, DECISIONS D15
 
   // Core promise, E2E-21
   const apex = 'Which open work orders are at risk from late POs from Apex Castings?';

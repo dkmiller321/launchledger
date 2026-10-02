@@ -65,3 +65,39 @@ Stages 0-6 were implemented together after the parallel spec-writing in stage 0,
 - E2E-30: pass — decision mix 14/4/2, latest eval 30/30, 2 incidents; screenshot reviewed (bar colours and week labels tidied afterwards)
 
 Dev-server note: `uvicorn --reload` launched through `uv run` stopped reloading after pytest-playwright cleared `test-results/` (which held its log). The walkthrough server now runs without reload from the venv interpreter, logging to `logs/`, and is restarted after code changes.
+
+### Final acceptance · 2026-10-02 (Docker Compose stack with the test override)
+
+| Check | Command | Result |
+|---|---|---|
+| Build and boot | `docker compose -f docker-compose.yml -f docker-compose.test.yml up -d --build` | `/healthz` → `{"status":"ok","db":true,"llm_mode":"mock"}` |
+| E2E vs container, run 1 | `BASE_URL=http://127.0.0.1:8000 uv run pytest e2e -m "not smoke"` | 31 passed |
+| E2E vs container, run 2 | same | 31 passed |
+| E2E vs container, run 3 | same | 31 passed. **Flaky specs: 0** |
+| Eval gate in container | `docker compose exec app ll eval run --model mock` | 60/60, exit 0 |
+| Drift gates in container | `... --drift <scenario>` | rename 48 correct / 12 declined / **0 wrong**; new WO status 39 / 21 / **0**; cost in cents 48 / 12 / **0**; null revision 55 / 5 / **0**; date format 48 / 12 / **0**; all exit 0 |
+| Unit + integration (host) | `uv run pytest tests` | 35 passed |
+| Lint / types | ruff, mypy | clean |
+| Smoke (real model) | `RUN_SMOKE=1 uv run pytest e2e -m smoke` | **Skipped**: `OPENROUTER_API_KEY` is empty in `.env`. `ll eval compare` verified only as mock vs mock. |
+
+**playwright-headless walkthrough against the container** (P1 first, P0 second so E2E-21 runs last): every scenario passed, E2E-21 included (`Answered` → `Declined: upstream data from ERP failed its contract (/purchase_orders: promised_date missing; unexpected field promise_date).` → ERP red, 1 run affected → drift eval wrong 0, declined 12 → resolve → `Answered`). The script reported E2E-18 as FAIL because the walkthrough script itself still expected `30/30`; the app correctly showed `60/60` under the amended contract (D15). Fixed the script; not an app defect.
+
+**Totals:** 35 unit/integration, 31 E2E (x3 in Docker, x2 in dev), 60 golden cases, 5 drift scenarios with 0 wrong answers, 4 smoke tests skipped (no API key).
+
+**Known issues**
+- Real-model behaviour is untested: smoke tests and `ll eval compare` on OpenRouter models need a key and model slugs.
+- Stage commits are grouped (0-6, 7-8, 9) because shared code was written before gating; each stage was still gated separately.
+- Starlette warns that its TestClient prefers `httpx2`; harmless (D13).
+
+**Run it for real**
+```bash
+cp .env.example .env              # mock mode works with no key
+docker compose up -d --build      # http://127.0.0.1:8000
+```
+Real models: set `LLM_MODE=openrouter`, `OPENROUTER_API_KEY`, `WORKFLOW_MODEL`, `ROUTER_MODEL` in `.env`, then `docker compose up -d --build`.
+
+**Run the 2-minute demo** (docs/DEMO.md)
+```bash
+docker compose -f docker-compose.yml -f docker-compose.test.yml up -d --build
+curl -X POST http://127.0.0.1:8000/api/test/reset
+```
