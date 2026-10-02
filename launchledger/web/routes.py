@@ -12,6 +12,7 @@ from launchledger.assistant.runner import run_question
 from launchledger.assistant.workflows import WORKFLOWS
 from launchledger.contracts.incidents import incidents_json, resolve
 from launchledger.contracts.monitor import check_now
+from launchledger.dashboard.metrics import compute as compute_metrics
 from launchledger.db.session import db_ok
 from launchledger.drift.scenarios import SCENARIOS
 from launchledger.drift.state import enabled_scenarios, set_scenario
@@ -343,3 +344,16 @@ def api_feedback_convert(request: Request, feedback_id: int) -> Response:
             f"({path.name})</span>"
         )
     return JSONResponse({"case_id": case_id, "path": str(path)})
+
+
+# --- Dashboard (P1) ----------------------------------------------------------------------------
+
+
+@router.get("/dashboard", response_class=HTMLResponse)
+def dashboard_page(request: Request) -> HTMLResponse:
+    return page(request, "dashboard.html", "dashboard", m=compute_metrics())
+
+
+@router.get("/api/dashboard")
+def api_dashboard() -> JSONResponse:
+    return JSONResponse(compute_metrics())

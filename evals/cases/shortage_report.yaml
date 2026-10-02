@@ -1,0 +1,100 @@
+- id: W11-01
+  question: Shortage report for P-1077
+  expected_workflow: shortage_report
+  expected_decision: answered
+  expected_facts:
+  - system: PLM
+    record_type: bom_line
+    record_id: BL-0001
+    field: qty
+    value: 1
+  - system: PLM
+    record_type: bom_line
+    record_id: BL-0002
+    field: qty
+    value: 1
+  - system: MES
+    record_type: work_order
+    record_id: WO-50102
+    field: serial_number
+    value: SN-0042
+  - system: MES
+    record_type: work_order
+    record_id: WO-50410
+    field: serial_number
+    value: SN-0120
+  - system: MES
+    record_type: work_order
+    record_id: WO-50217
+    field: serial_number
+    value: SN-0057
+  - system: ERP
+    record_type: purchase_order
+    record_id: PO-10233
+    field: qty
+    value: 4
+  - system: ERP
+    record_type: purchase_order
+    record_id: PO-10240
+    field: qty
+    value: 2
+  forbidden_values: []
+- id: W11-02
+  question: Shortage report for P-3300
+  expected_workflow: shortage_report
+  expected_decision: answered
+  expected_facts:
+  - system: PLM
+    record_type: bom_line
+    record_id: BL-0003
+    field: qty
+    value: 1
+  - system: MES
+    record_type: work_order
+    record_id: WO-50102
+    field: serial_number
+    value: SN-0042
+  - system: MES
+    record_type: work_order
+    record_id: WO-50410
+    field: serial_number
+    value: SN-0120
+  - system: ERP
+    record_type: purchase_order
+    record_id: PO-10300
+    field: qty
+    value: 10
+  - system: ERP
+    record_type: purchase_order
+    record_id: PO-10410
+    field: qty
+    value: 5
+  forbidden_values: []
+- id: W11-03
+  question: Shortage report for P-1500
+  expected_workflow: shortage_report
+  expected_decision: answered
+  expected_facts: []
+  forbidden_values: []
+- id: W11-04
+  question: How many P-1077 are on order?
+  expected_workflow: shortage_report
+  expected_decision: answered
+  expected_facts:
+  - system: ERP
+    record_type: purchase_order
+    record_id: PO-10233
+    field: qty
+    value: 4
+  - system: ERP
+    record_type: purchase_order
+    record_id: PO-10240
+    field: qty
+    value: 2
+  forbidden_values: []
+- id: W11-05
+  question: Shortage report for P-9999
+  expected_workflow: shortage_report
+  expected_decision: answered
+  expected_facts: []
+  forbidden_values: []

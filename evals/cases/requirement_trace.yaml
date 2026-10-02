@@ -1,0 +1,85 @@
+- id: W7-01
+  question: Trace requirement REQ-118
+  expected_workflow: requirement_trace
+  expected_decision: answered
+  expected_facts:
+  - system: REQ
+    record_type: requirement
+    record_id: REQ-118
+    field: text
+    value: Casting porosity limited to ASTM E505 level 2
+  - system: PLM
+    record_type: part
+    record_id: P-1077
+    field: part_number
+    value: P-1077
+  - system: MES
+    record_type: ncr
+    record_id: NCR-0311
+    field: requirement_id
+    value: REQ-118
+  - system: MES
+    record_type: ncr
+    record_id: NCR-0311
+    field: status
+    value: OPEN
+  - system: MES
+    record_type: ncr
+    record_id: NCR-0320
+    field: requirement_id
+    value: REQ-118
+  - system: MES
+    record_type: ncr
+    record_id: NCR-0320
+    field: status
+    value: OPEN
+  forbidden_values: []
+- id: W7-02
+  question: Trace requirement REQ-104
+  expected_workflow: requirement_trace
+  expected_decision: answered
+  expected_facts:
+  - system: REQ
+    record_type: requirement
+    record_id: REQ-104
+    field: text
+    value: Mounting face finish 63 Ra max
+  - system: PLM
+    record_type: part
+    record_id: P-2001
+    field: part_number
+    value: P-2001
+  forbidden_values: []
+- id: W7-03
+  question: Which parts does REQ-118 apply to?
+  expected_workflow: requirement_trace
+  expected_decision: answered
+  expected_facts:
+  - system: PLM
+    record_type: part
+    record_id: P-1077
+    field: part_number
+    value: P-1077
+  - system: PLM
+    record_type: part
+    record_id: P-1077
+    field: name
+    value: Turbopump inducer housing
+  forbidden_values: []
+- id: W7-04
+  question: What is the verification method for REQ-104?
+  expected_workflow: requirement_trace
+  expected_decision: answered
+  expected_facts:
+  - system: REQ
+    record_type: requirement
+    record_id: REQ-104
+    field: verification_method
+    value: Inspection
+  forbidden_values: []
+- id: W7-05
+  question: Trace requirement REQ-999
+  expected_workflow: requirement_trace
+  expected_decision: answered
+  expected_facts: []
+  forbidden_values: []

@@ -1,0 +1,85 @@
+- id: W9-01
+  question: Show the scorecard for Apex Castings
+  expected_workflow: supplier_scorecard
+  expected_decision: answered
+  expected_facts:
+  - system: DW
+    record_type: supplier_on_time
+    record_id: SUP-007
+    field: on_time_rate
+    value: 1.0
+  - system: DW
+    record_type: supplier_on_time
+    record_id: SUP-007
+    field: pos_received
+    value: 1
+  - system: DW
+    record_type: supplier_on_time
+    record_id: SUP-007
+    field: pos_on_time
+    value: 1
+  - system: DW
+    record_type: supplier_on_time
+    record_id: SUP-007
+    field: open_late_pos
+    value: 1
+  - system: ERP
+    record_type: purchase_order
+    record_id: PO-10233
+    field: status
+    value: OPEN
+  forbidden_values: []
+- id: W9-02
+  question: Show the scorecard for Cryo Valve Works
+  expected_workflow: supplier_scorecard
+  expected_decision: answered
+  expected_facts:
+  - system: DW
+    record_type: supplier_on_time
+    record_id: SUP-019
+    field: pos_received
+    value: 0
+  - system: DW
+    record_type: supplier_on_time
+    record_id: SUP-019
+    field: open_late_pos
+    value: 1
+  - system: ERP
+    record_type: purchase_order
+    record_id: PO-10410
+    field: status
+    value: OPEN
+  forbidden_values: []
+- id: W9-03
+  question: Show the scorecard for Orbital Fasteners
+  expected_workflow: supplier_scorecard
+  expected_decision: answered
+  expected_facts:
+  - system: DW
+    record_type: supplier_on_time
+    record_id: SUP-012
+    field: pos_received
+    value: 0
+  - system: DW
+    record_type: supplier_on_time
+    record_id: SUP-012
+    field: open_late_pos
+    value: 0
+  forbidden_values: []
+- id: W9-04
+  question: How many open late POs does Apex Castings have?
+  expected_workflow: supplier_scorecard
+  expected_decision: answered
+  expected_facts:
+  - system: DW
+    record_type: supplier_on_time
+    record_id: SUP-007
+    field: open_late_pos
+    value: 1
+  forbidden_values: []
+- id: W9-05
+  question: Show the scorecard for Acme Rockets
+  expected_workflow: supplier_scorecard
+  expected_decision: answered
+  expected_facts: []
+  forbidden_values: []

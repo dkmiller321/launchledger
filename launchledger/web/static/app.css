@@ -62,3 +62,6 @@ pre { white-space: pre-wrap; word-break: break-word; font-size: .8rem; margin: 4
 .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 12px; }
 .kpi { font-size: 1.6rem; font-weight: 650; }
 .bar { height: 10px; background: var(--accent); border-radius: 3px; }
+.bar.out { background: var(--good); }
+.panel h2 { margin-top: 0; }
+td[data-key^="inflow"], td:first-child { white-space: nowrap; }

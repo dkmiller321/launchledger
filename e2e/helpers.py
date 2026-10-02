@@ -87,3 +87,10 @@ def resolve_open_incident(page: Page, base_url: str) -> None:
     row = page.locator("[data-testid=incident-row][data-status=open]").first
     row.get_by_test_id("incident-resolve").click()
     expect(page.locator("[data-testid=incident-row][data-status=open]")).to_have_count(0)
+
+
+def suite_total(api: httpx.Client, eval_id: str) -> int:
+    """Golden cases counted by this eval run (30 P0 before stage 7, 60 after; DECISIONS D15)."""
+    total = int(api.get(f"/api/evals/{eval_id}").json()["total"])
+    assert total >= 30, "the P0 golden cases must always be in the suite"
+    return total

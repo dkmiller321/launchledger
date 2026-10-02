@@ -1,0 +1,75 @@
+- id: W12-01
+  question: Which export-controlled parts are in P-2001?
+  expected_workflow: export_check
+  expected_decision: answered
+  expected_facts:
+  - system: PLM
+    record_type: part
+    record_id: P-1077
+    field: export_controlled
+    value: true
+  - system: PLM
+    record_type: part
+    record_id: P-1077
+    field: name
+    value: Turbopump inducer housing
+  - system: PLM
+    record_type: part
+    record_id: P-3300
+    field: export_controlled
+    value: false
+  forbidden_values: []
+- id: W12-02
+  question: Which export-controlled parts are in P-2110?
+  expected_workflow: export_check
+  expected_decision: answered
+  expected_facts:
+  - system: PLM
+    record_type: bom_line
+    record_id: BL-0002
+    field: child_pn
+    value: P-1077
+  - system: PLM
+    record_type: part
+    record_id: P-1077
+    field: export_controlled
+    value: true
+  forbidden_values: []
+- id: W12-03
+  question: Is P-3300 export-controlled?
+  expected_workflow: export_check
+  expected_decision: answered
+  expected_facts:
+  - system: PLM
+    record_type: part
+    record_id: P-3300
+    field: export_controlled
+    value: false
+  - system: PLM
+    record_type: part
+    record_id: P-3300
+    field: name
+    value: Engine controller harness
+  forbidden_values: []
+- id: W12-04
+  question: Is P-1077 export-controlled?
+  expected_workflow: export_check
+  expected_decision: answered
+  expected_facts:
+  - system: PLM
+    record_type: part
+    record_id: P-1077
+    field: export_controlled
+    value: true
+  - system: PLM
+    record_type: part
+    record_id: P-1077
+    field: name
+    value: Turbopump inducer housing
+  forbidden_values: []
+- id: W12-05
+  question: Which export-controlled parts are in P-1500?
+  expected_workflow: export_check
+  expected_decision: answered
+  expected_facts: []
+  forbidden_values: []

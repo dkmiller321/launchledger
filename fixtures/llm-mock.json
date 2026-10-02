@@ -13,6 +13,46 @@
    "workflow": "supplier_impact"
   },
   {
+   "trigger": "how many open late pos does apex castings have?",
+   "workflow": "supplier_scorecard"
+  },
+  {
+   "trigger": "how many closed work orders does p-2001 have?",
+   "workflow": "cycle_time"
+  },
+  {
+   "trigger": "what is the verification method for req-104?",
+   "workflow": "requirement_trace"
+  },
+  {
+   "trigger": "what's the impact of moving p-1077 to rev d?",
+   "workflow": "revision_impact"
+  },
+  {
+   "trigger": "what's the impact of moving p-3300 to rev e?",
+   "workflow": "revision_impact"
+  },
+  {
+   "trigger": "what's the impact of moving p-1500 to rev b?",
+   "workflow": "revision_impact"
+  },
+  {
+   "trigger": "what's the impact of moving p-9999 to rev b?",
+   "workflow": "revision_impact"
+  },
+  {
+   "trigger": "which export-controlled parts are in p-2001?",
+   "workflow": "export_check"
+  },
+  {
+   "trigger": "which export-controlled parts are in p-2110?",
+   "workflow": "export_check"
+  },
+  {
+   "trigger": "which export-controlled parts are in p-1500?",
+   "workflow": "export_check"
+  },
+  {
    "trigger": "what's in the bill of materials for p-2001?",
    "workflow": "where_used"
   },
@@ -25,12 +65,36 @@
    "workflow": "ncr_summary"
   },
   {
+   "trigger": "show the scorecard for orbital fasteners",
+   "workflow": "supplier_scorecard"
+  },
+  {
+   "trigger": "show the scorecard for cryo valve works",
+   "workflow": "supplier_scorecard"
+  },
+  {
    "trigger": "what's the current status of sn-0120?",
    "workflow": "serial_status"
   },
   {
+   "trigger": "which open work orders build p-2110?",
+   "workflow": "revision_impact"
+  },
+  {
+   "trigger": "show the scorecard for apex castings",
+   "workflow": "supplier_scorecard"
+  },
+  {
    "trigger": "which ncrs are open on part p-2110?",
    "workflow": "ncr_summary"
+  },
+  {
+   "trigger": "show the scorecard for acme rockets",
+   "workflow": "supplier_scorecard"
+  },
+  {
+   "trigger": "which parts does req-118 apply to?",
+   "workflow": "requirement_trace"
   },
   {
    "trigger": "which assemblies use part p-3300?",
@@ -57,6 +121,22 @@
    "workflow": "build_readiness"
   },
   {
+   "trigger": "what's the cycle time for p-2001?",
+   "workflow": "cycle_time"
+  },
+  {
+   "trigger": "what's the cycle time for p-1500?",
+   "workflow": "cycle_time"
+  },
+  {
+   "trigger": "what's the cycle time for p-2110?",
+   "workflow": "cycle_time"
+  },
+  {
+   "trigger": "what's the cycle time for p-9999?",
+   "workflow": "cycle_time"
+  },
+  {
    "trigger": "which assemblies use part p-1077",
    "workflow": "where_used"
   },
@@ -69,8 +149,20 @@
    "workflow": "po_status"
   },
   {
+   "trigger": "how many p-1077 are on order?",
+   "workflow": "shortage_report"
+  },
+  {
    "trigger": "show ncr details for sn-0057",
    "workflow": "ncr_summary"
+  },
+  {
+   "trigger": "is p-3300 export-controlled?",
+   "workflow": "export_check"
+  },
+  {
+   "trigger": "is p-1077 export-controlled?",
+   "workflow": "export_check"
   },
   {
    "trigger": "where is sn-0057 right now?",
@@ -93,8 +185,36 @@
    "workflow": "build_readiness"
   },
   {
+   "trigger": "shortage report for p-1077",
+   "workflow": "shortage_report"
+  },
+  {
+   "trigger": "shortage report for p-3300",
+   "workflow": "shortage_report"
+  },
+  {
+   "trigger": "shortage report for p-1500",
+   "workflow": "shortage_report"
+  },
+  {
+   "trigger": "shortage report for p-9999",
+   "workflow": "shortage_report"
+  },
+  {
    "trigger": "is sn-0101 ready to ship?",
    "workflow": "build_readiness"
+  },
+  {
+   "trigger": "trace requirement req-118",
+   "workflow": "requirement_trace"
+  },
+  {
+   "trigger": "trace requirement req-104",
+   "workflow": "requirement_trace"
+  },
+  {
+   "trigger": "trace requirement req-999",
+   "workflow": "requirement_trace"
   },
   {
    "trigger": "repairable output test",
@@ -320,6 +440,538 @@
    ]
   },
   {
+   "id": "W9-04",
+   "trigger": "how many open late pos does apex castings have?",
+   "steps": [
+    {
+     "tool_calls": [
+      {
+       "name": "find_supplier",
+       "arguments": {
+        "name": "Apex Castings"
+       }
+      }
+     ]
+    },
+    {
+     "tool_calls": [
+      {
+       "name": "dw_supplier_on_time",
+       "arguments": {
+        "supplier_id": "SUP-007"
+       }
+      }
+     ]
+    },
+    {
+     "final": {
+      "answer": "Apex Castings has 1 open late PO.",
+      "claims": [
+       {
+        "text": "One open late PO.",
+        "facts": [
+         {
+          "system": "DW",
+          "record_type": "supplier_on_time",
+          "record_id": "SUP-007",
+          "field": "open_late_pos",
+          "value": 1
+         }
+        ]
+       }
+      ],
+      "caveats": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "W10-04",
+   "trigger": "how many closed work orders does p-2001 have?",
+   "steps": [
+    {
+     "tool_calls": [
+      {
+       "name": "dw_cycle_time",
+       "arguments": {
+        "part_number": "P-2001"
+       }
+      }
+     ]
+    },
+    {
+     "final": {
+      "answer": "P-2001 has 1 closed work order in the data warehouse.",
+      "claims": [
+       {
+        "text": "One closed work order.",
+        "facts": [
+         {
+          "system": "DW",
+          "record_type": "wo_cycle_time",
+          "record_id": "P-2001",
+          "field": "closed_wos",
+          "value": 1
+         }
+        ]
+       }
+      ],
+      "caveats": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "W7-04",
+   "trigger": "what is the verification method for req-104?",
+   "steps": [
+    {
+     "tool_calls": [
+      {
+       "name": "get_requirement",
+       "arguments": {
+        "req_id": "REQ-104"
+       }
+      }
+     ]
+    },
+    {
+     "final": {
+      "answer": "REQ-104 is verified by Inspection.",
+      "claims": [
+       {
+        "text": "REQ-104 is verified by inspection.",
+        "facts": [
+         {
+          "system": "REQ",
+          "record_type": "requirement",
+          "record_id": "REQ-104",
+          "field": "verification_method",
+          "value": "Inspection"
+         }
+        ]
+       }
+      ],
+      "caveats": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "W8-01",
+   "trigger": "what's the impact of moving p-1077 to rev d?",
+   "steps": [
+    {
+     "tool_calls": [
+      {
+       "name": "where_used",
+       "arguments": {
+        "part_number": "P-1077"
+       }
+      }
+     ]
+    },
+    {
+     "tool_calls": [
+      {
+       "name": "get_part",
+       "arguments": {
+        "part_number": "P-2110"
+       }
+      }
+     ]
+    },
+    {
+     "tool_calls": [
+      {
+       "name": "list_work_orders",
+       "arguments": {
+        "part_number": "P-2001"
+       }
+      }
+     ]
+    },
+    {
+     "tool_calls": [
+      {
+       "name": "list_work_orders",
+       "arguments": {
+        "part_number": "P-2110"
+       }
+      }
+     ]
+    },
+    {
+     "final": {
+      "answer": "Moving P-1077 to rev D affects P-2001 and P-2110 builds. Work orders not yet closed: WO-50102 and WO-50103 on SN-0042, WO-50410 on SN-0120, and WO-50217 on SN-0057.",
+      "claims": [
+       {
+        "text": "P-1077 is used in P-2001 and P-2110.",
+        "facts": [
+         {
+          "system": "PLM",
+          "record_type": "bom_line",
+          "record_id": "BL-0001",
+          "field": "parent_pn",
+          "value": "P-2001"
+         },
+         {
+          "system": "PLM",
+          "record_type": "bom_line",
+          "record_id": "BL-0002",
+          "field": "parent_pn",
+          "value": "P-2110"
+         }
+        ]
+       },
+       {
+        "text": "SN-0042 has two open work orders.",
+        "facts": [
+         {
+          "system": "MES",
+          "record_type": "work_order",
+          "record_id": "WO-50102",
+          "field": "serial_number",
+          "value": "SN-0042"
+         },
+         {
+          "system": "MES",
+          "record_type": "work_order",
+          "record_id": "WO-50102",
+          "field": "status",
+          "value": "BLOCKED"
+         },
+         {
+          "system": "MES",
+          "record_type": "work_order",
+          "record_id": "WO-50103",
+          "field": "serial_number",
+          "value": "SN-0042"
+         },
+         {
+          "system": "MES",
+          "record_type": "work_order",
+          "record_id": "WO-50103",
+          "field": "status",
+          "value": "OPEN"
+         }
+        ]
+       },
+       {
+        "text": "SN-0120 and SN-0057 each have one.",
+        "facts": [
+         {
+          "system": "MES",
+          "record_type": "work_order",
+          "record_id": "WO-50410",
+          "field": "serial_number",
+          "value": "SN-0120"
+         },
+         {
+          "system": "MES",
+          "record_type": "work_order",
+          "record_id": "WO-50410",
+          "field": "status",
+          "value": "OPEN"
+         },
+         {
+          "system": "MES",
+          "record_type": "work_order",
+          "record_id": "WO-50217",
+          "field": "serial_number",
+          "value": "SN-0057"
+         },
+         {
+          "system": "MES",
+          "record_type": "work_order",
+          "record_id": "WO-50217",
+          "field": "status",
+          "value": "OPEN"
+         }
+        ]
+       }
+      ],
+      "caveats": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "W8-02",
+   "trigger": "what's the impact of moving p-3300 to rev e?",
+   "steps": [
+    {
+     "tool_calls": [
+      {
+       "name": "where_used",
+       "arguments": {
+        "part_number": "P-3300"
+       }
+      }
+     ]
+    },
+    {
+     "tool_calls": [
+      {
+       "name": "list_work_orders",
+       "arguments": {
+        "part_number": "P-2001"
+       }
+      }
+     ]
+    },
+    {
+     "final": {
+      "answer": "Moving P-3300 to rev E affects P-2001 builds: WO-50102 and WO-50103 on SN-0042 and WO-50410 on SN-0120 are not closed.",
+      "claims": [
+       {
+        "text": "P-3300 is used in P-2001.",
+        "facts": [
+         {
+          "system": "PLM",
+          "record_type": "bom_line",
+          "record_id": "BL-0003",
+          "field": "parent_pn",
+          "value": "P-2001"
+         }
+        ]
+       },
+       {
+        "text": "Three P-2001 work orders are not closed.",
+        "facts": [
+         {
+          "system": "MES",
+          "record_type": "work_order",
+          "record_id": "WO-50102",
+          "field": "status",
+          "value": "BLOCKED"
+         },
+         {
+          "system": "MES",
+          "record_type": "work_order",
+          "record_id": "WO-50103",
+          "field": "status",
+          "value": "OPEN"
+         },
+         {
+          "system": "MES",
+          "record_type": "work_order",
+          "record_id": "WO-50410",
+          "field": "status",
+          "value": "OPEN"
+         }
+        ]
+       }
+      ],
+      "caveats": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "W8-03",
+   "trigger": "what's the impact of moving p-1500 to rev b?",
+   "steps": [
+    {
+     "tool_calls": [
+      {
+       "name": "where_used",
+       "arguments": {
+        "part_number": "P-1500"
+       }
+      }
+     ]
+    },
+    {
+     "final": {
+      "answer": "No assemblies use P-1500, so a revision change has no BOM impact.",
+      "claims": [],
+      "caveats": [
+       "PLM lists no BOM lines that use P-1500."
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "W8-05",
+   "trigger": "what's the impact of moving p-9999 to rev b?",
+   "steps": [
+    {
+     "tool_calls": [
+      {
+       "name": "where_used",
+       "arguments": {
+        "part_number": "P-9999"
+       }
+      }
+     ]
+    },
+    {
+     "final": {
+      "answer": "I couldn't find part P-9999 in PLM.",
+      "claims": [],
+      "caveats": [
+       "P-9999 was not found in PLM."
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "W12-01",
+   "trigger": "which export-controlled parts are in p-2001?",
+   "steps": [
+    {
+     "tool_calls": [
+      {
+       "name": "get_bom",
+       "arguments": {
+        "part_number": "P-2001"
+       }
+      }
+     ]
+    },
+    {
+     "tool_calls": [
+      {
+       "name": "get_part",
+       "arguments": {
+        "part_number": "P-1077"
+       }
+      }
+     ]
+    },
+    {
+     "tool_calls": [
+      {
+       "name": "get_part",
+       "arguments": {
+        "part_number": "P-3300"
+       }
+      }
+     ]
+    },
+    {
+     "final": {
+      "answer": "P-2001 contains one export-controlled part: P-1077 (Turbopump inducer housing). P-3300 is not export-controlled.",
+      "claims": [
+       {
+        "text": "P-1077 is export-controlled.",
+        "facts": [
+         {
+          "system": "PLM",
+          "record_type": "part",
+          "record_id": "P-1077",
+          "field": "export_controlled",
+          "value": true
+         },
+         {
+          "system": "PLM",
+          "record_type": "part",
+          "record_id": "P-1077",
+          "field": "name",
+          "value": "Turbopump inducer housing"
+         }
+        ]
+       },
+       {
+        "text": "P-3300 is not.",
+        "facts": [
+         {
+          "system": "PLM",
+          "record_type": "part",
+          "record_id": "P-3300",
+          "field": "export_controlled",
+          "value": false
+         }
+        ]
+       }
+      ],
+      "caveats": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "W12-02",
+   "trigger": "which export-controlled parts are in p-2110?",
+   "steps": [
+    {
+     "tool_calls": [
+      {
+       "name": "get_bom",
+       "arguments": {
+        "part_number": "P-2110"
+       }
+      }
+     ]
+    },
+    {
+     "tool_calls": [
+      {
+       "name": "get_part",
+       "arguments": {
+        "part_number": "P-1077"
+       }
+      }
+     ]
+    },
+    {
+     "final": {
+      "answer": "P-2110 contains one export-controlled part: P-1077 (Turbopump inducer housing).",
+      "claims": [
+       {
+        "text": "P-1077 is in P-2110 and export-controlled.",
+        "facts": [
+         {
+          "system": "PLM",
+          "record_type": "bom_line",
+          "record_id": "BL-0002",
+          "field": "child_pn",
+          "value": "P-1077"
+         },
+         {
+          "system": "PLM",
+          "record_type": "part",
+          "record_id": "P-1077",
+          "field": "export_controlled",
+          "value": true
+         }
+        ]
+       }
+      ],
+      "caveats": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "W12-05",
+   "trigger": "which export-controlled parts are in p-1500?",
+   "steps": [
+    {
+     "tool_calls": [
+      {
+       "name": "get_bom",
+       "arguments": {
+        "part_number": "P-1500"
+       }
+      }
+     ]
+    },
+    {
+     "final": {
+      "answer": "P-1500 has no child parts in PLM, so it contains no export-controlled parts.",
+      "claims": [],
+      "caveats": [
+       "PLM lists no BOM lines under P-1500."
+      ]
+     }
+    }
+   ]
+  },
+  {
    "id": "W3-03",
    "trigger": "what's in the bill of materials for p-2001?",
    "steps": [
@@ -496,6 +1148,148 @@
    ]
   },
   {
+   "id": "W9-03",
+   "trigger": "show the scorecard for orbital fasteners",
+   "steps": [
+    {
+     "tool_calls": [
+      {
+       "name": "find_supplier",
+       "arguments": {
+        "name": "Orbital Fasteners"
+       }
+      }
+     ]
+    },
+    {
+     "tool_calls": [
+      {
+       "name": "dw_supplier_on_time",
+       "arguments": {
+        "supplier_id": "SUP-012"
+       }
+      }
+     ]
+    },
+    {
+     "tool_calls": [
+      {
+       "name": "list_pos",
+       "arguments": {
+        "supplier_id": "SUP-012",
+        "late_only": true
+       }
+      }
+     ]
+    },
+    {
+     "final": {
+      "answer": "Orbital Fasteners has no received POs and no late open POs.",
+      "claims": [
+       {
+        "text": "No received or late POs.",
+        "facts": [
+         {
+          "system": "DW",
+          "record_type": "supplier_on_time",
+          "record_id": "SUP-012",
+          "field": "pos_received",
+          "value": 0
+         },
+         {
+          "system": "DW",
+          "record_type": "supplier_on_time",
+          "record_id": "SUP-012",
+          "field": "open_late_pos",
+          "value": 0
+         }
+        ]
+       }
+      ],
+      "caveats": [
+       "ERP returned no late POs for Orbital Fasteners."
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "W9-02",
+   "trigger": "show the scorecard for cryo valve works",
+   "steps": [
+    {
+     "tool_calls": [
+      {
+       "name": "find_supplier",
+       "arguments": {
+        "name": "Cryo Valve Works"
+       }
+      }
+     ]
+    },
+    {
+     "tool_calls": [
+      {
+       "name": "dw_supplier_on_time",
+       "arguments": {
+        "supplier_id": "SUP-019"
+       }
+      }
+     ]
+    },
+    {
+     "tool_calls": [
+      {
+       "name": "list_pos",
+       "arguments": {
+        "supplier_id": "SUP-019",
+        "late_only": true
+       }
+      }
+     ]
+    },
+    {
+     "final": {
+      "answer": "Cryo Valve Works has no received POs yet, so it has no on-time history; 1 open PO is late: PO-10410.",
+      "claims": [
+       {
+        "text": "No received POs yet.",
+        "facts": [
+         {
+          "system": "DW",
+          "record_type": "supplier_on_time",
+          "record_id": "SUP-019",
+          "field": "pos_received",
+          "value": 0
+         }
+        ]
+       },
+       {
+        "text": "PO-10410 is late.",
+        "facts": [
+         {
+          "system": "DW",
+          "record_type": "supplier_on_time",
+          "record_id": "SUP-019",
+          "field": "open_late_pos",
+          "value": 1
+         },
+         {
+          "system": "ERP",
+          "record_type": "purchase_order",
+          "record_id": "PO-10410",
+          "field": "status",
+          "value": "OPEN"
+         }
+        ]
+       }
+      ],
+      "caveats": []
+     }
+    }
+   ]
+  },
+  {
    "id": "W1-05",
    "trigger": "what's the current status of sn-0120?",
    "steps": [
@@ -568,6 +1362,139 @@
    ]
   },
   {
+   "id": "W8-04",
+   "trigger": "which open work orders build p-2110?",
+   "steps": [
+    {
+     "tool_calls": [
+      {
+       "name": "list_work_orders",
+       "arguments": {
+        "part_number": "P-2110"
+       }
+      }
+     ]
+    },
+    {
+     "final": {
+      "answer": "One open work order builds P-2110: WO-50217 on SN-0057.",
+      "claims": [
+       {
+        "text": "WO-50217 on SN-0057 is open.",
+        "facts": [
+         {
+          "system": "MES",
+          "record_type": "work_order",
+          "record_id": "WO-50217",
+          "field": "serial_number",
+          "value": "SN-0057"
+         },
+         {
+          "system": "MES",
+          "record_type": "work_order",
+          "record_id": "WO-50217",
+          "field": "status",
+          "value": "OPEN"
+         }
+        ]
+       }
+      ],
+      "caveats": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "W9-01",
+   "trigger": "show the scorecard for apex castings",
+   "steps": [
+    {
+     "tool_calls": [
+      {
+       "name": "find_supplier",
+       "arguments": {
+        "name": "Apex Castings"
+       }
+      }
+     ]
+    },
+    {
+     "tool_calls": [
+      {
+       "name": "dw_supplier_on_time",
+       "arguments": {
+        "supplier_id": "SUP-007"
+       }
+      }
+     ]
+    },
+    {
+     "tool_calls": [
+      {
+       "name": "list_pos",
+       "arguments": {
+        "supplier_id": "SUP-007",
+        "late_only": true
+       }
+      }
+     ]
+    },
+    {
+     "final": {
+      "answer": "Apex Castings: on-time rate 100% (1 of 1 received POs on time), with 1 open late PO: PO-10233.",
+      "claims": [
+       {
+        "text": "Apex Castings delivered 1 of 1 received POs on time.",
+        "facts": [
+         {
+          "system": "DW",
+          "record_type": "supplier_on_time",
+          "record_id": "SUP-007",
+          "field": "on_time_rate",
+          "value": 1.0
+         },
+         {
+          "system": "DW",
+          "record_type": "supplier_on_time",
+          "record_id": "SUP-007",
+          "field": "pos_received",
+          "value": 1
+         },
+         {
+          "system": "DW",
+          "record_type": "supplier_on_time",
+          "record_id": "SUP-007",
+          "field": "pos_on_time",
+          "value": 1
+         }
+        ]
+       },
+       {
+        "text": "PO-10233 is its one open late PO.",
+        "facts": [
+         {
+          "system": "DW",
+          "record_type": "supplier_on_time",
+          "record_id": "SUP-007",
+          "field": "open_late_pos",
+          "value": 1
+         },
+         {
+          "system": "ERP",
+          "record_type": "purchase_order",
+          "record_id": "PO-10233",
+          "field": "status",
+          "value": "OPEN"
+         }
+        ]
+       }
+      ],
+      "caveats": []
+     }
+    }
+   ]
+  },
+  {
    "id": "W4-04",
    "trigger": "which ncrs are open on part p-2110?",
    "steps": [
@@ -616,6 +1543,74 @@
           "record_id": "NCR-0320",
           "field": "description",
           "value": "Flange surface pitting"
+         }
+        ]
+       }
+      ],
+      "caveats": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "W9-05",
+   "trigger": "show the scorecard for acme rockets",
+   "steps": [
+    {
+     "tool_calls": [
+      {
+       "name": "find_supplier",
+       "arguments": {
+        "name": "Acme Rockets"
+       }
+      }
+     ]
+    },
+    {
+     "final": {
+      "answer": "No supplier named Acme Rockets was found in ERP.",
+      "claims": [],
+      "caveats": [
+       "No supplier named Acme Rockets was found in ERP."
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "W7-03",
+   "trigger": "which parts does req-118 apply to?",
+   "steps": [
+    {
+     "tool_calls": [
+      {
+       "name": "list_requirement_parts",
+       "arguments": {
+        "req_id": "REQ-118"
+       }
+      }
+     ]
+    },
+    {
+     "final": {
+      "answer": "REQ-118 applies to one part: P-1077 (Turbopump inducer housing).",
+      "claims": [
+       {
+        "text": "REQ-118 applies to P-1077.",
+        "facts": [
+         {
+          "system": "PLM",
+          "record_type": "part",
+          "record_id": "P-1077",
+          "field": "part_number",
+          "value": "P-1077"
+         },
+         {
+          "system": "PLM",
+          "record_type": "part",
+          "record_id": "P-1077",
+          "field": "name",
+          "value": "Turbopump inducer housing"
          }
         ]
        }
@@ -874,6 +1869,149 @@
    ]
   },
   {
+   "id": "W10-01",
+   "trigger": "what's the cycle time for p-2001?",
+   "steps": [
+    {
+     "tool_calls": [
+      {
+       "name": "dw_cycle_time",
+       "arguments": {
+        "part_number": "P-2001"
+       }
+      }
+     ]
+    },
+    {
+     "final": {
+      "answer": "P-2001 work orders take 17.0 days on average (1 closed work order; the latest took 17.0 days).",
+      "claims": [
+       {
+        "text": "Average and latest cycle time are 17 days.",
+        "facts": [
+         {
+          "system": "DW",
+          "record_type": "wo_cycle_time",
+          "record_id": "P-2001",
+          "field": "avg_cycle_days",
+          "value": 17.0
+         },
+         {
+          "system": "DW",
+          "record_type": "wo_cycle_time",
+          "record_id": "P-2001",
+          "field": "last_cycle_days",
+          "value": 17.0
+         },
+         {
+          "system": "DW",
+          "record_type": "wo_cycle_time",
+          "record_id": "P-2001",
+          "field": "closed_wos",
+          "value": 1
+         }
+        ]
+       }
+      ],
+      "caveats": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "W10-02",
+   "trigger": "what's the cycle time for p-1500?",
+   "steps": [
+    {
+     "tool_calls": [
+      {
+       "name": "dw_cycle_time",
+       "arguments": {
+        "part_number": "P-1500"
+       }
+      }
+     ]
+    },
+    {
+     "final": {
+      "answer": "P-1500 work orders take 24.0 days on average (1 closed work order).",
+      "claims": [
+       {
+        "text": "Average cycle time is 24 days.",
+        "facts": [
+         {
+          "system": "DW",
+          "record_type": "wo_cycle_time",
+          "record_id": "P-1500",
+          "field": "avg_cycle_days",
+          "value": 24.0
+         },
+         {
+          "system": "DW",
+          "record_type": "wo_cycle_time",
+          "record_id": "P-1500",
+          "field": "closed_wos",
+          "value": 1
+         }
+        ]
+       }
+      ],
+      "caveats": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "W10-03",
+   "trigger": "what's the cycle time for p-2110?",
+   "steps": [
+    {
+     "tool_calls": [
+      {
+       "name": "dw_cycle_time",
+       "arguments": {
+        "part_number": "P-2110"
+       }
+      }
+     ]
+    },
+    {
+     "final": {
+      "answer": "There is no cycle-time history for P-2110 yet.",
+      "claims": [],
+      "caveats": [
+       "The data warehouse has no closed work orders for P-2110."
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "W10-05",
+   "trigger": "what's the cycle time for p-9999?",
+   "steps": [
+    {
+     "tool_calls": [
+      {
+       "name": "dw_cycle_time",
+       "arguments": {
+        "part_number": "P-9999"
+       }
+      }
+     ]
+    },
+    {
+     "final": {
+      "answer": "I couldn't find cycle-time data for P-9999.",
+      "claims": [],
+      "caveats": [
+       "P-9999 has no cycle-time record in the data warehouse."
+      ]
+     }
+    }
+   ]
+  },
+  {
    "id": "W3-01",
    "trigger": "which assemblies use part p-1077",
    "steps": [
@@ -1023,6 +2161,50 @@
    ]
   },
   {
+   "id": "W11-04",
+   "trigger": "how many p-1077 are on order?",
+   "steps": [
+    {
+     "tool_calls": [
+      {
+       "name": "list_pos",
+       "arguments": {
+        "part_number": "P-1077",
+        "status": "OPEN"
+       }
+      }
+     ]
+    },
+    {
+     "final": {
+      "answer": "6 units of P-1077 are on order: PO-10233 for 4 and PO-10240 for 2.",
+      "claims": [
+       {
+        "text": "Six units on two open POs.",
+        "facts": [
+         {
+          "system": "ERP",
+          "record_type": "purchase_order",
+          "record_id": "PO-10233",
+          "field": "qty",
+          "value": 4
+         },
+         {
+          "system": "ERP",
+          "record_type": "purchase_order",
+          "record_id": "PO-10240",
+          "field": "qty",
+          "value": 2
+         }
+        ]
+       }
+      ],
+      "caveats": []
+     }
+    }
+   ]
+  },
+  {
    "id": "W4-05",
    "trigger": "show ncr details for sn-0057",
    "steps": [
@@ -1070,6 +2252,92 @@
           "record_id": "NCR-0320",
           "field": "requirement_id",
           "value": "REQ-118"
+         }
+        ]
+       }
+      ],
+      "caveats": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "W12-03",
+   "trigger": "is p-3300 export-controlled?",
+   "steps": [
+    {
+     "tool_calls": [
+      {
+       "name": "get_part",
+       "arguments": {
+        "part_number": "P-3300"
+       }
+      }
+     ]
+    },
+    {
+     "final": {
+      "answer": "No. P-3300 (Engine controller harness) is not export-controlled.",
+      "claims": [
+       {
+        "text": "P-3300 is not export-controlled.",
+        "facts": [
+         {
+          "system": "PLM",
+          "record_type": "part",
+          "record_id": "P-3300",
+          "field": "export_controlled",
+          "value": false
+         },
+         {
+          "system": "PLM",
+          "record_type": "part",
+          "record_id": "P-3300",
+          "field": "name",
+          "value": "Engine controller harness"
+         }
+        ]
+       }
+      ],
+      "caveats": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "W12-04",
+   "trigger": "is p-1077 export-controlled?",
+   "steps": [
+    {
+     "tool_calls": [
+      {
+       "name": "get_part",
+       "arguments": {
+        "part_number": "P-1077"
+       }
+      }
+     ]
+    },
+    {
+     "final": {
+      "answer": "Yes. P-1077 (Turbopump inducer housing) is export-controlled.",
+      "claims": [
+       {
+        "text": "P-1077 is export-controlled.",
+        "facts": [
+         {
+          "system": "PLM",
+          "record_type": "part",
+          "record_id": "P-1077",
+          "field": "export_controlled",
+          "value": true
+         },
+         {
+          "system": "PLM",
+          "record_type": "part",
+          "record_id": "P-1077",
+          "field": "name",
+          "value": "Turbopump inducer housing"
          }
         ]
        }
@@ -1431,6 +2699,260 @@
    ]
   },
   {
+   "id": "W11-01",
+   "trigger": "shortage report for p-1077",
+   "steps": [
+    {
+     "tool_calls": [
+      {
+       "name": "where_used",
+       "arguments": {
+        "part_number": "P-1077"
+       }
+      }
+     ]
+    },
+    {
+     "tool_calls": [
+      {
+       "name": "list_work_orders",
+       "arguments": {
+        "part_number": "P-2001"
+       }
+      }
+     ]
+    },
+    {
+     "tool_calls": [
+      {
+       "name": "list_work_orders",
+       "arguments": {
+        "part_number": "P-2110"
+       }
+      }
+     ]
+    },
+    {
+     "tool_calls": [
+      {
+       "name": "list_pos",
+       "arguments": {
+        "part_number": "P-1077",
+        "status": "OPEN"
+       }
+      }
+     ]
+    },
+    {
+     "final": {
+      "answer": "P-1077 is covered: open demand is 3 units (SN-0042, SN-0120, SN-0057) against 6 on order (PO-10233 for 4, which is late, and PO-10240 for 2).",
+      "claims": [
+       {
+        "text": "Demand comes from three serials with open work orders.",
+        "facts": [
+         {
+          "system": "PLM",
+          "record_type": "bom_line",
+          "record_id": "BL-0001",
+          "field": "qty",
+          "value": 1
+         },
+         {
+          "system": "PLM",
+          "record_type": "bom_line",
+          "record_id": "BL-0002",
+          "field": "qty",
+          "value": 1
+         },
+         {
+          "system": "MES",
+          "record_type": "work_order",
+          "record_id": "WO-50102",
+          "field": "serial_number",
+          "value": "SN-0042"
+         },
+         {
+          "system": "MES",
+          "record_type": "work_order",
+          "record_id": "WO-50410",
+          "field": "serial_number",
+          "value": "SN-0120"
+         },
+         {
+          "system": "MES",
+          "record_type": "work_order",
+          "record_id": "WO-50217",
+          "field": "serial_number",
+          "value": "SN-0057"
+         }
+        ]
+       },
+       {
+        "text": "Six units are on order.",
+        "facts": [
+         {
+          "system": "ERP",
+          "record_type": "purchase_order",
+          "record_id": "PO-10233",
+          "field": "qty",
+          "value": 4
+         },
+         {
+          "system": "ERP",
+          "record_type": "purchase_order",
+          "record_id": "PO-10240",
+          "field": "qty",
+          "value": 2
+         }
+        ]
+       }
+      ],
+      "caveats": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "W11-02",
+   "trigger": "shortage report for p-3300",
+   "steps": [
+    {
+     "tool_calls": [
+      {
+       "name": "where_used",
+       "arguments": {
+        "part_number": "P-3300"
+       }
+      }
+     ]
+    },
+    {
+     "tool_calls": [
+      {
+       "name": "list_work_orders",
+       "arguments": {
+        "part_number": "P-2001"
+       }
+      }
+     ]
+    },
+    {
+     "tool_calls": [
+      {
+       "name": "list_pos",
+       "arguments": {
+        "part_number": "P-3300",
+        "status": "OPEN"
+       }
+      }
+     ]
+    },
+    {
+     "final": {
+      "answer": "P-3300 is covered: demand is 2 units (SN-0042, SN-0120) against 15 on order (PO-10300 for 10, and PO-10410 for 5, which is late).",
+      "claims": [
+       {
+        "text": "Demand comes from two P-2001 serials.",
+        "facts": [
+         {
+          "system": "PLM",
+          "record_type": "bom_line",
+          "record_id": "BL-0003",
+          "field": "qty",
+          "value": 1
+         },
+         {
+          "system": "MES",
+          "record_type": "work_order",
+          "record_id": "WO-50102",
+          "field": "serial_number",
+          "value": "SN-0042"
+         },
+         {
+          "system": "MES",
+          "record_type": "work_order",
+          "record_id": "WO-50410",
+          "field": "serial_number",
+          "value": "SN-0120"
+         }
+        ]
+       },
+       {
+        "text": "Fifteen units are on order.",
+        "facts": [
+         {
+          "system": "ERP",
+          "record_type": "purchase_order",
+          "record_id": "PO-10300",
+          "field": "qty",
+          "value": 10
+         },
+         {
+          "system": "ERP",
+          "record_type": "purchase_order",
+          "record_id": "PO-10410",
+          "field": "qty",
+          "value": 5
+         }
+        ]
+       }
+      ],
+      "caveats": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "W11-03",
+   "trigger": "shortage report for p-1500",
+   "steps": [
+    {
+     "tool_calls": [
+      {
+       "name": "where_used",
+       "arguments": {
+        "part_number": "P-1500"
+       }
+      }
+     ]
+    },
+    {
+     "final": {
+      "answer": "No assemblies use P-1500, so there is no build demand for it.",
+      "claims": [],
+      "caveats": [
+       "PLM lists no BOM lines that use P-1500."
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "W11-05",
+   "trigger": "shortage report for p-9999",
+   "steps": [
+    {
+     "tool_calls": [
+      {
+       "name": "where_used",
+       "arguments": {
+        "part_number": "P-9999"
+       }
+      }
+     ]
+    },
+    {
+     "final": {
+      "answer": "I couldn't find part P-9999 in PLM.",
+      "claims": [],
+      "caveats": [
+       "P-9999 was not found in PLM."
+      ]
+     }
+    }
+   ]
+  },
+  {
    "id": "W6-02",
    "trigger": "is sn-0101 ready to ship?",
    "steps": [
@@ -1496,6 +3018,204 @@
       ],
       "caveats": [
        "MES returned no open NCRs for SN-0101."
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "W7-01",
+   "trigger": "trace requirement req-118",
+   "steps": [
+    {
+     "tool_calls": [
+      {
+       "name": "get_requirement",
+       "arguments": {
+        "req_id": "REQ-118"
+       }
+      }
+     ]
+    },
+    {
+     "tool_calls": [
+      {
+       "name": "list_requirement_parts",
+       "arguments": {
+        "req_id": "REQ-118"
+       }
+      }
+     ]
+    },
+    {
+     "tool_calls": [
+      {
+       "name": "list_ncrs",
+       "arguments": {
+        "requirement_id": "REQ-118",
+        "status": "OPEN"
+       }
+      }
+     ]
+    },
+    {
+     "final": {
+      "answer": "REQ-118 (Casting porosity limited to ASTM E505 level 2) applies to P-1077. Two NCRs are open against it: NCR-0311 on SN-0042 and NCR-0320 on SN-0057.",
+      "claims": [
+       {
+        "text": "REQ-118 limits casting porosity.",
+        "facts": [
+         {
+          "system": "REQ",
+          "record_type": "requirement",
+          "record_id": "REQ-118",
+          "field": "text",
+          "value": "Casting porosity limited to ASTM E505 level 2"
+         }
+        ]
+       },
+       {
+        "text": "It applies to P-1077.",
+        "facts": [
+         {
+          "system": "PLM",
+          "record_type": "part",
+          "record_id": "P-1077",
+          "field": "part_number",
+          "value": "P-1077"
+         }
+        ]
+       },
+       {
+        "text": "NCR-0311 and NCR-0320 are open against it.",
+        "facts": [
+         {
+          "system": "MES",
+          "record_type": "ncr",
+          "record_id": "NCR-0311",
+          "field": "requirement_id",
+          "value": "REQ-118"
+         },
+         {
+          "system": "MES",
+          "record_type": "ncr",
+          "record_id": "NCR-0311",
+          "field": "status",
+          "value": "OPEN"
+         },
+         {
+          "system": "MES",
+          "record_type": "ncr",
+          "record_id": "NCR-0320",
+          "field": "requirement_id",
+          "value": "REQ-118"
+         },
+         {
+          "system": "MES",
+          "record_type": "ncr",
+          "record_id": "NCR-0320",
+          "field": "status",
+          "value": "OPEN"
+         }
+        ]
+       }
+      ],
+      "caveats": []
+     }
+    }
+   ]
+  },
+  {
+   "id": "W7-02",
+   "trigger": "trace requirement req-104",
+   "steps": [
+    {
+     "tool_calls": [
+      {
+       "name": "get_requirement",
+       "arguments": {
+        "req_id": "REQ-104"
+       }
+      }
+     ]
+    },
+    {
+     "tool_calls": [
+      {
+       "name": "list_requirement_parts",
+       "arguments": {
+        "req_id": "REQ-104"
+       }
+      }
+     ]
+    },
+    {
+     "tool_calls": [
+      {
+       "name": "list_ncrs",
+       "arguments": {
+        "requirement_id": "REQ-104",
+        "status": "OPEN"
+       }
+      }
+     ]
+    },
+    {
+     "final": {
+      "answer": "REQ-104 (Mounting face finish 63 Ra max) applies to P-2001. No open NCRs are recorded against it.",
+      "claims": [
+       {
+        "text": "REQ-104 sets the mounting face finish.",
+        "facts": [
+         {
+          "system": "REQ",
+          "record_type": "requirement",
+          "record_id": "REQ-104",
+          "field": "text",
+          "value": "Mounting face finish 63 Ra max"
+         }
+        ]
+       },
+       {
+        "text": "It applies to P-2001.",
+        "facts": [
+         {
+          "system": "PLM",
+          "record_type": "part",
+          "record_id": "P-2001",
+          "field": "part_number",
+          "value": "P-2001"
+         }
+        ]
+       }
+      ],
+      "caveats": [
+       "MES has no open NCRs against REQ-104."
+      ]
+     }
+    }
+   ]
+  },
+  {
+   "id": "W7-05",
+   "trigger": "trace requirement req-999",
+   "steps": [
+    {
+     "tool_calls": [
+      {
+       "name": "get_requirement",
+       "arguments": {
+        "req_id": "REQ-999"
+       }
+      }
+     ]
+    },
+    {
+     "final": {
+      "answer": "I couldn't find REQ-999 in the requirements system.",
+      "claims": [],
+      "caveats": [
+       "REQ-999 was not found in REQ."
       ]
      }
     }

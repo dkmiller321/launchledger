@@ -9,3 +9,4 @@ test-results/
 evals/cases/drafts/
 eval-reports/
 .playwright-mcp/
+logs/

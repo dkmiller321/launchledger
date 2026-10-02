@@ -1,0 +1,75 @@
+{% extends "base.html" %}
+{% block title %}Dashboard{% endblock %}
+{% block content %}
+<h1>Assistant health</h1>
+<p class="muted">
+  {% if m.latest_eval %}Latest mock eval {{ m.latest_eval.passed }}/{{ m.latest_eval.total }}. {% endif %}
+  {{ m.backlog_total }} open feedback items. {{ m.incidents_total }} drift incidents ({{ m.incidents_open }} open).
+  Weekly Markdown report: <code>ll report weekly</code>.
+</p>
+<div class="grid">
+  <section class="panel" data-testid="dash-panel" data-panel="inflow-outflow">
+    <h2>Feedback inflow vs outflow</h2>
+    {% set peak = (m.weeks|map(attribute='inflow')|list + m.weeks|map(attribute='outflow')|list + [1])|max %}
+    <table data-testid="dash-table">
+      <thead><tr><th>Week</th><th>In</th><th>Out</th><th></th></tr></thead>
+      <tbody>
+      {% for w in m.weeks %}
+      <tr>
+        <td>{{ w.week }}</td>
+        <td data-key="inflow-{{ w.week }}">{{ w.inflow }}</td>
+        <td data-key="outflow-{{ w.week }}">{{ w.outflow }}</td>
+        <td style="width:45%">
+          <div class="bar" style="width:{{ (100 * w.inflow / peak)|round }}%" title="in"></div>
+          <div class="bar out" style="width:{{ (100 * w.outflow / peak)|round }}%; margin-top:3px" title="out"></div>
+        </td>
+      </tr>
+      {% else %}<tr><td colspan="4" class="muted">No feedback yet.</td></tr>{% endfor %}
+      </tbody>
+    </table>
+    <p class="muted">Blue: reports in. Green: reports closed (verified or won't fix).</p>
+  </section>
+
+  <section class="panel" data-testid="dash-panel" data-panel="backlog">
+    <h2>Open backlog</h2>
+    <p class="kpi">{{ m.backlog_total }}</p>
+    <table data-testid="dash-table">
+      {% for status, n in m.backlog.items() %}
+      <tr><td>{{ status|capitalize }}</td><td data-key="{{ status }}">{{ n }}</td></tr>
+      {% endfor %}
+    </table>
+  </section>
+
+  <section class="panel" data-testid="dash-panel" data-panel="eval-pass-rate">
+    <h2>Eval pass rate</h2>
+    <table data-testid="dash-table">
+      <tr><th>Latest</th><td data-key="latest">{% if m.latest_eval %}{{ m.latest_eval.passed }}/{{ m.latest_eval.total }}{% else %}—{% endif %}</td></tr>
+      {% for e in m.evals|reverse %}
+      <tr><td><a href="/evals/{{ e.id }}">Run {{ e.id }}</a> <span class="muted">{{ e.when }}</span></td>
+          <td data-key="eval-{{ e.id }}">{{ e.passed }}/{{ e.total }}</td></tr>
+      {% endfor %}
+    </table>
+  </section>
+
+  <section class="panel" data-testid="dash-panel" data-panel="drift-incidents">
+    <h2>Drift incidents</h2>
+    <table data-testid="dash-table">
+      <tr><th>Total</th><td data-key="total">{{ m.incidents_total }}</td></tr>
+      <tr><th>Open</th><td data-key="open">{{ m.incidents_open }}</td></tr>
+      {% for week, n in m.incident_weeks %}
+      <tr><td>{{ week }}</td><td data-key="week-{{ week }}">{{ n }}</td></tr>
+      {% endfor %}
+    </table>
+  </section>
+
+  <section class="panel" data-testid="dash-panel" data-panel="decision-mix">
+    <h2>Answers by decision</h2>
+    <table data-testid="dash-table">
+      {% for d, n in m.decisions.items() %}
+      <tr><td><span class="badge {{ d }}">{{ d|capitalize }}</span></td><td data-key="{{ d }}">{{ n }}</td></tr>
+      {% endfor %}
+    </table>
+    <p class="muted">{{ m.runs_total }} runs in total.</p>
+  </section>
+</div>
+{% endblock %}

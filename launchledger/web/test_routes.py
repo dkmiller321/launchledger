@@ -31,3 +31,11 @@ async def eval_overrides(request: Request) -> JSONResponse:
     data = await request.json()
     set_override(str(data["case_id"]), list(data["expected_facts"]))
     return JSONResponse({"ok": True})
+
+
+@test_router.post("/seed-activity")
+async def seed_activity_route() -> dict[str, Any]:
+    from launchledger.dashboard.demo import seed_activity
+
+    await run_in_threadpool(seed_activity)
+    return {"ok": True}

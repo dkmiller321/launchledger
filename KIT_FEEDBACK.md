@@ -53,6 +53,15 @@ N. **[tag] One-line summary.** What happened.
    - *Cost:* one failed walkthrough and a rerun.
    - *Kit change:* give walkthroughs their own database (e.g. `launchledger_walk`) or state "never run them concurrently".
 
+10. **[contract] E2E-18/19/26 hard-coded the P0 suite size (`30/30`, six workflows) but E2E-29 requires `60/60` on the same suite after stage 7.** Both cannot hold once P1 cases exist; it surfaced as 3 failures in the cumulative run.
+   - *Cost:* a stop-and-ask to the user and three spec edits (DECISIONS D15).
+   - *Kit change:* write eval-count assertions as "N/N where N is the run's total" from the start, or scope P0 specs to P0 cases explicitly.
+   - *User decision:* "Assert full pass, any size (Recommended)".
+
+11. **[env] pytest-playwright deletes `test-results/` at the start of every run**, so a dev-server log kept there vanished (and `uvicorn --reload` via `uv run` stopped reloading).
+   - *Cost:* one stale-server walkthrough failure.
+   - *Kit change:* keep server logs in `logs/`, and run the walkthrough server from the venv interpreter.
+
 ## Sending this log to KitForge (final acceptance step 7)
 
 Send exactly one report. Each log entry becomes one `corrections` item (`text` = the entry with its tag, cost and kit change; `quote` = the user's own words if the user corrected you, else omit it). Use the final test totals.

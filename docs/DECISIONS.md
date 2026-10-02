@@ -42,3 +42,9 @@ Contract steps expose `contract: "pass"|"fail"` and `endpoint`; `/runs/{id}` ren
 
 ### D13 · 2026-10-02 · Installed versions
 Python 3.12.11, uv 0.7.14, FastAPI/Starlette current minors, uvicorn 0.54, SQLAlchemy 2.x, psycopg 3, htmx 2.0.4 (vendored). Starlette warns that using `httpx` with its TestClient is deprecated in favour of `httpx2`; harmless, left as is.
+
+### D14 · 2026-10-02 · P1 workflow definitions
+Shortage (W11): demand = BOM qty x distinct serials of each parent assembly that still have a work order not CLOSED; supply = summed qty of OPEN POs for the part. Cycle time (W10): days from `opened_on` to `closed_on` per CLOSED work order, by the serial's part; average and latest from the DW rollup. Revision impact (W8): parents from `where_used`, then work orders not CLOSED on serials of those parents. Supplier scorecard (W9): on-time = received on or before `due_date`, from the DW rollup, plus open late POs. 30 P1 golden cases use only pinned records.
+
+### D15 · 2026-10-02 · Spec change (approved by the user): E2E-18/19/26 no longer hard-code 30 cases
+**Proposed spec change, approved.** E2E-18/19/26 asserted `30/30` (six workflows), which contradicts E2E-29's `60/60` once stage 7 adds the P1 cases to the same mock suite. They now read N from the run's `total`, require N ≥ 30, and assert `N/N` (E2E-19: `(N-1)/N`) and `5/5` for every workflow. Intent unchanged: the whole suite passes and one injected wrong value fails exactly one case. Alternatives offered: a P0-only scope selector, or making P1 cases opt-in.

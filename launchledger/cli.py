@@ -141,5 +141,29 @@ def dw_rebuild() -> None:
     typer.echo("data warehouse rebuilt")
 
 
+@demo_app.command("seed-activity")
+def demo_seed_activity() -> None:
+    """Replace app data with a known month of activity for the dashboard demo."""
+    from launchledger.dashboard.demo import seed_activity
+
+    seed_activity()
+    typer.echo("demo activity written: 20 runs, 12 feedback items, 3 eval runs, 2 incidents")
+
+
+@report_app.command("weekly")
+def report_weekly(
+    out: Annotated[Path | None, typer.Option(help="Write the Markdown here")] = None,
+) -> None:
+    """Leadership report: backlog flow, eval pass rate, drift incidents (PRD B2)."""
+    from launchledger.dashboard.metrics import compute, weekly_report
+
+    text = weekly_report(compute())
+    if out:
+        out.write_text(text, encoding="utf-8")
+        typer.echo(f"report written to {out}")
+    else:
+        typer.echo(text)
+
+
 if __name__ == "__main__":
     app()

@@ -1,0 +1,60 @@
+- id: W10-01
+  question: What's the cycle time for P-2001?
+  expected_workflow: cycle_time
+  expected_decision: answered
+  expected_facts:
+  - system: DW
+    record_type: wo_cycle_time
+    record_id: P-2001
+    field: avg_cycle_days
+    value: 17.0
+  - system: DW
+    record_type: wo_cycle_time
+    record_id: P-2001
+    field: last_cycle_days
+    value: 17.0
+  - system: DW
+    record_type: wo_cycle_time
+    record_id: P-2001
+    field: closed_wos
+    value: 1
+  forbidden_values: []
+- id: W10-02
+  question: What's the cycle time for P-1500?
+  expected_workflow: cycle_time
+  expected_decision: answered
+  expected_facts:
+  - system: DW
+    record_type: wo_cycle_time
+    record_id: P-1500
+    field: avg_cycle_days
+    value: 24.0
+  - system: DW
+    record_type: wo_cycle_time
+    record_id: P-1500
+    field: closed_wos
+    value: 1
+  forbidden_values: []
+- id: W10-03
+  question: What's the cycle time for P-2110?
+  expected_workflow: cycle_time
+  expected_decision: answered
+  expected_facts: []
+  forbidden_values: []
+- id: W10-04
+  question: How many closed work orders does P-2001 have?
+  expected_workflow: cycle_time
+  expected_decision: answered
+  expected_facts:
+  - system: DW
+    record_type: wo_cycle_time
+    record_id: P-2001
+    field: closed_wos
+    value: 1
+  forbidden_values: []
+- id: W10-05
+  question: What's the cycle time for P-9999?
+  expected_workflow: cycle_time
+  expected_decision: answered
+  expected_facts: []
+  forbidden_values: []

@@ -311,9 +311,9 @@ Each scenario starts from a reset database at `/` unless stated otherwise. "Ask 
 
 ### Stage 4 — Evals
 
-**E2E-18 @stage4 mock eval suite (V1–V3, V6, U4).** On `/evals`, leave `evals-drift-select` at `none`, click `evals-run-mock`. Within 90 s, `eval-status` = `complete`; `eval-pass-count` = `30/30`; six `eval-pass-rate` elements each read `5/5`.
+**E2E-18 @stage4 mock eval suite (V1–V3, V6, U4).** On `/evals`, leave `evals-drift-select` at `none`, click `evals-run-mock`. Within 90 s, `eval-status` = `complete`; with N = the run's `total` from `GET /api/evals/{id}` (N ≥ 30: 30 before stage 7, 60 after), `eval-pass-count` = `N/N` and N/5 `eval-pass-rate` elements each read `5/5`. *(Amended 2026-10-02, DECISIONS D15: was a fixed `30/30`, which contradicts E2E-29 once stage 7 adds P1 cases.)*
 
-**E2E-19 @stage4 failing case shows its diff (V2, V6).** `POST /api/test/eval-overrides` with `{"case_id":"W5-01","expected_facts":[{"system":"ERP","record_type":"purchase_order","record_id":"PO-10233","field":"status","value":"CLOSED"}]}`. Run the mock suite. `eval-pass-count` = `29/30`; `eval-case-row[data-case-id=W5-01]` has `data-passed=false` and its `eval-case-diff` contains `CLOSED` and `OPEN`.
+**E2E-19 @stage4 failing case shows its diff (V2, V6).** `POST /api/test/eval-overrides` with `{"case_id":"W5-01","expected_facts":[{"system":"ERP","record_type":"purchase_order","record_id":"PO-10233","field":"status","value":"CLOSED"}]}`. Run the mock suite. `eval-pass-count` = `(N-1)/N` (N as in E2E-18); `eval-case-row[data-case-id=W5-01]` has `data-passed=false` and its `eval-case-diff` contains `CLOSED` and `OPEN`.
 
 ### Stage 5 — Drift
 
@@ -337,7 +337,7 @@ Each scenario starts from a reset database at `/` unless stated otherwise. "Ask 
 
 **E2E-25 @stage6 triage flow is logged and persists (F2, U9).** From E2E-24's state, set the row to `triaged` with disposition `data_issue` and save; then `fixed`; then `verified`. Three `feedback-event` elements. Reload: `data-status=verified`, three events, disposition `data_issue`.
 
-**E2E-26 @stage6 feedback becomes a regression case (F3, U9).** From E2E-24's state, click `feedback-convert`. `feedback-convert-result` shows `draft-<feedback id>`. Run the mock suite on `/evals`: an `eval-case-row` with `data-case-id=draft-<feedback id>` exists and passes. `eval-pass-count` still reads `30/30` (drafts are reported but not counted toward the threshold).
+**E2E-26 @stage6 feedback becomes a regression case (F3, U9).** From E2E-24's state, click `feedback-convert`. `feedback-convert-result` shows `draft-<feedback id>`. Run the mock suite on `/evals`: an `eval-case-row` with `data-case-id=draft-<feedback id>` exists and passes. `eval-pass-count` still reads `N/N` (drafts are reported but not counted toward the threshold).
 
 ### Stage 7 — P1 systems and workflows
 

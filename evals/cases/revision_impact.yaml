@@ -1,0 +1,110 @@
+- id: W8-01
+  question: What's the impact of moving P-1077 to rev D?
+  expected_workflow: revision_impact
+  expected_decision: answered
+  expected_facts:
+  - system: PLM
+    record_type: bom_line
+    record_id: BL-0001
+    field: parent_pn
+    value: P-2001
+  - system: PLM
+    record_type: bom_line
+    record_id: BL-0002
+    field: parent_pn
+    value: P-2110
+  - system: MES
+    record_type: work_order
+    record_id: WO-50102
+    field: serial_number
+    value: SN-0042
+  - system: MES
+    record_type: work_order
+    record_id: WO-50102
+    field: status
+    value: BLOCKED
+  - system: MES
+    record_type: work_order
+    record_id: WO-50103
+    field: serial_number
+    value: SN-0042
+  - system: MES
+    record_type: work_order
+    record_id: WO-50103
+    field: status
+    value: OPEN
+  - system: MES
+    record_type: work_order
+    record_id: WO-50410
+    field: serial_number
+    value: SN-0120
+  - system: MES
+    record_type: work_order
+    record_id: WO-50410
+    field: status
+    value: OPEN
+  - system: MES
+    record_type: work_order
+    record_id: WO-50217
+    field: serial_number
+    value: SN-0057
+  - system: MES
+    record_type: work_order
+    record_id: WO-50217
+    field: status
+    value: OPEN
+  forbidden_values: []
+- id: W8-02
+  question: What's the impact of moving P-3300 to rev E?
+  expected_workflow: revision_impact
+  expected_decision: answered
+  expected_facts:
+  - system: PLM
+    record_type: bom_line
+    record_id: BL-0003
+    field: parent_pn
+    value: P-2001
+  - system: MES
+    record_type: work_order
+    record_id: WO-50102
+    field: status
+    value: BLOCKED
+  - system: MES
+    record_type: work_order
+    record_id: WO-50103
+    field: status
+    value: OPEN
+  - system: MES
+    record_type: work_order
+    record_id: WO-50410
+    field: status
+    value: OPEN
+  forbidden_values: []
+- id: W8-03
+  question: What's the impact of moving P-1500 to rev B?
+  expected_workflow: revision_impact
+  expected_decision: answered
+  expected_facts: []
+  forbidden_values: []
+- id: W8-04
+  question: Which open work orders build P-2110?
+  expected_workflow: revision_impact
+  expected_decision: answered
+  expected_facts:
+  - system: MES
+    record_type: work_order
+    record_id: WO-50217
+    field: serial_number
+    value: SN-0057
+  - system: MES
+    record_type: work_order
+    record_id: WO-50217
+    field: status
+    value: OPEN
+  forbidden_values: []
+- id: W8-05
+  question: What's the impact of moving P-9999 to rev B?
+  expected_workflow: revision_impact
+  expected_decision: answered
+  expected_facts: []
+  forbidden_values: []

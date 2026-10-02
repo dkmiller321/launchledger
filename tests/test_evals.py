@@ -49,7 +49,7 @@ def test_it_06_golden_facts_match_the_seed(clean: None, client: TestClient) -> N
 def test_it_05_cli_passes_then_fails_on_a_changed_golden_value(clean: None, tmp_path: Path) -> None:
     ok = ll("eval", "run", "--model", "mock", "--json-out", str(tmp_path / "r.json"))
     assert ok.returncode == 0, ok.stdout + ok.stderr
-    assert "passed 30/30" in ok.stdout
+    assert "passed 60/60" in ok.stdout
 
     cases_dir = tmp_path / "cases"
     shutil.copytree(REPO_ROOT / "evals" / "cases", cases_dir)
