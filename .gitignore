@@ -1,0 +1,10 @@
+.env
+.venv/
+__pycache__/
+*.pyc
+test-results/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+evals/cases/drafts/
+eval-reports/
