@@ -129,6 +129,31 @@ def eval_run(
     raise typer.Exit(1 if problems else 0)
 
 
+@eval_app.command("compare")
+def eval_compare(
+    model_a: str,
+    model_b: str,
+    workflow: Annotated[list[str] | None, typer.Option(help="W1..W12; repeatable")] = None,
+    out: Annotated[Path | None, typer.Option(help="Write the Markdown report here")] = None,
+    systems_url: SystemsUrl = None,
+) -> None:
+    """Run the same suite on two models and write a side-by-side Markdown report (PRD V8)."""
+    from launchledger.evals.runner import compare_markdown, create_eval_run, execute_eval_run
+
+    _connect(systems_url)
+    reports = []
+    for model in (model_a, model_b):
+        typer.echo(f"running suite on {model} ...")
+        reports.append(execute_eval_run(create_eval_run(model, None), model, workflow, None))
+    text = compare_markdown(reports[0], reports[1])
+    safe = "".join(ch if ch.isalnum() else "-" for ch in f"{model_a}-vs-{model_b}")
+    path = out or Path("eval-reports") / f"compare-{safe}.md"
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text(text, encoding="utf-8")
+    typer.echo(text)
+    typer.echo(f"report: {path}")
+
+
 @dw_app.command("rebuild")
 def dw_rebuild() -> None:
     """Recompute the data-warehouse rollups from ERP and MES."""

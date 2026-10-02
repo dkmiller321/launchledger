@@ -185,3 +185,44 @@ def eval_json(eval_id: int) -> dict[str, Any] | None:
 def recent_eval_runs(limit: int = 20) -> list[EvalRun]:
     with session_scope() as s:
         return list(s.scalars(select(EvalRun).order_by(EvalRun.id.desc()).limit(limit)))
+
+
+def compare_markdown(a: dict[str, Any], b: dict[str, Any]) -> str:
+    """Side-by-side report of two eval runs on the same suite (PRD V8)."""
+
+    def rate(report: dict[str, Any], workflow: str) -> str:
+        c = report["per_workflow"].get(workflow)
+        return f"{c['passed']}/{c['total']}" if c else "-"
+
+    lines = [
+        f"# Model comparison: {a['model']} vs {b['model']}",
+        "",
+        f"| | {a['model']} | {b['model']} |",
+        "| --- | --- | --- |",
+        f"| Passed | {a['passed']}/{a['total']} | {b['passed']}/{b['total']} |",
+        f"| p95 latency (ms) | {a['latency_ms_p95']} | {b['latency_ms_p95']} |",
+        f"| Tokens | {a['tokens']} | {b['tokens']} |",
+        f"| Estimated cost (USD) | {a['cost_usd']:.4f} | {b['cost_usd']:.4f} |",
+    ]
+    for workflow in sorted(set(a["per_workflow"]) | set(b["per_workflow"])):
+        lines.append(f"| {workflow} | {rate(a, workflow)} | {rate(b, workflow)} |")
+    only_a = sorted(
+        c["case_id"]
+        for c in a["cases"]
+        if c["passed"]
+        and not c["draft"]
+        and not any(d["case_id"] == c["case_id"] and d["passed"] for d in b["cases"])
+    )
+    only_b = sorted(
+        c["case_id"]
+        for c in b["cases"]
+        if c["passed"]
+        and not c["draft"]
+        and not any(d["case_id"] == c["case_id"] and d["passed"] for d in a["cases"])
+    )
+    lines += [
+        "",
+        f"Only {a['model']} passed: {', '.join(only_a) or 'none'}.",
+        f"Only {b['model']} passed: {', '.join(only_b) or 'none'}.",
+    ]
+    return "\n".join(lines) + "\n"

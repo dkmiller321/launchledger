@@ -77,3 +77,13 @@ def test_it_07_drift_mode_eval_has_no_wrong_answers(clean: None, scenario: str) 
     out = ll("eval", "run", "--model", "mock", "--drift", scenario)
     assert out.returncode == 0, out.stdout + out.stderr
     assert "| wrong 0" in out.stdout
+
+
+def test_v8_compare_report(clean: None, tmp_path: Path) -> None:
+    out = tmp_path / "compare.md"
+    result = ll("eval", "compare", "mock", "mock", "--workflow", "W1", "--out", str(out))
+    assert result.returncode == 0, result.stdout + result.stderr
+    text = out.read_text(encoding="utf-8")
+    assert "# Model comparison: mock vs mock" in text
+    assert "| Passed | 5/5 | 5/5 |" in text
+    assert "| serial_status | 5/5 | 5/5 |" in text
